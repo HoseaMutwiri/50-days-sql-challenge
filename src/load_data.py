@@ -1,3 +1,11 @@
+
+# DAY 1 TASK 5
+# IMPORT THE CSV FILES TO THE DATABASE
+
+
+# import all project libraries
+
+
 from sqlalchemy import text,create_engine,String, CHAR, Numeric, DateTime, func
 
 import psycopg
@@ -14,6 +22,8 @@ from pathlib import Path
 
 #==============================================
 
+# load database connection details from .env file
+
 load_dotenv()
 
 class config:
@@ -28,10 +38,17 @@ class config:
         return f"postgresql+psycopg://{self.db_user}:{self.db_password}@{self.db_host}:{self.db_port}/{self.db_name}"
     
 
+# create postgresql connection engine
+
 engine = create_engine(config.connection_url())
 
 
+# define raw datasets location path
+
 folder_path = Path(r"datasets\raw_datasets")
+
+# load all csv file in raw_dataset dir to the postgresql database using a for loop
+
 
 for file in folder_path.glob("*.csv"):
     try:
@@ -51,3 +68,5 @@ for file in folder_path.glob("*.csv"):
     except Exception as error:
         print(f"failed to load {file.name} : {error}")
 print("Import process completed")
+
+
