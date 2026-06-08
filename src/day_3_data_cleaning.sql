@@ -51,7 +51,7 @@ GROUP BY dept_id,dept_name
 HAVING COUNT(*) > 1;
 
 
--- TABLE DEPARTMENTS HAS NO DUPLICATES
+-- TABLE attendance HAS NO DUPLICATES
         
 SELECT attendance_id,COUNT(*) AS count_dup
 FROM challenge_50.clean_attendance
@@ -64,3 +64,11 @@ SELECT salary_id,COUNT(*) AS count_dub
 FROM challenge_50.clean_salaries
 GROUP BY salary_id,emp_id
 HAVING COUNT(*) > 1;
+
+
+
+-- TABLE PERFORMANCE HAS DUPLICATE
+SELECT emp_id,rating_2022,rating_2023,rating_2024,COUNT(*)
+FROM challenge_50.clean_performance
+GROUP BY emp_id,rating_2022,rating_2023,rating_2024
+HAVING COUNT(*) >1;
