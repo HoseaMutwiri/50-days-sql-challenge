@@ -65,6 +65,7 @@ UPDATE challenge_50.clean_employees
 SET city = (CASE 
             WHEN city IN ('Dlhi','New Delhi','Dlehi Ncr') THEN 'Dlehi'
             WHEN city IN('Hydbd') THEN 'Hyderabad'
+            WHEN city IN('Bangalore') THEN 'Bengaluru'
             ELSE city
             END);
 
