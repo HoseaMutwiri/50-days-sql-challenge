@@ -36,11 +36,12 @@ SELECT ctid FROM perform_dup
 WHERE rownum > 1);
 
 
--- TASK 2 HANDLE INCONSISTENT VALUES
+-- TASK 2 HANDLE inconsistent VALUES
+
+-- Standardizing inconsistent VALUES OF TABLE EMPLOYEE ,DEPARTMENTS,AND ATTENDANCE
 
 SELECT DISTINCT(dept_name) 
 FROM challenge_50.clean_departments;
-
 
 UPDATE challenge_50.clean_departments
 SET dept_name = TRIM(UPPER(dept_name));
@@ -58,4 +59,12 @@ SELECT DISTINCT(city) FROM challenge_50.clean_employees;
 UPDATE challenge_50.clean_employees
 SET city = TRIM(INITCAP(city)),
     emp_name = TRIM(INITCAP(emp_name));
+
+
+UPDATE challenge_50.clean_employees
+SET city = (CASE 
+            WHEN city IN ('Dlhi','New Delhi','Dlehi Ncr') THEN 'Dlehi'
+            WHEN city IN('Hydbd') THEN 'Hyderabad'
+            ELSE city
+            END);
 

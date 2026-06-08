@@ -42,7 +42,7 @@ CREATE TABLE challenge_50.performance(
 -- CLEANING DATA PREP
 -- DAY 2 TASK 1 CREATE CLEANED TABLES
 --==============================================================
-
+DROP TABLE challenge_50.clean_employees;
 CREATE TABLE challenge_50.clean_employees
 AS SELECT * FROM challenge_50.employees;
 

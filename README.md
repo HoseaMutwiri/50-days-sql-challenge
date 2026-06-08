@@ -46,5 +46,19 @@ Clean the dataset by handling missing values across multiple tables.
 - Data should not be cleaned directly in raw tables
 - Business rules are important while filling missing values
 
-### Outcome
-Dataset is now more structured and ready for further cleaning and analysis.
+
+## Day 4: Data Cleaning (Handling Inconsistent Text)
+### Objective
+* Clean the dataset by fixing inconsistent text values across columns.
+
+### Tasks Completed
+1. Identified inconsistent text formats (e.g., HR, hr, Hr)
+2. Standardized text using functions like `UPPER()`, `LOWER()`, `INITCAP()`
+3. Trimmed extra spaces using TRIM()
+4. Replaced incorrect spellings and variations
+5. Ensured uniform naming conventions across tables
+
+### Key Learning
+* Text inconsistency affects grouping and analysis
+* Same values with different formats behave as different data
+* Standardization is critical before applying aggregations
