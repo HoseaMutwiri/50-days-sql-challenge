@@ -62,3 +62,16 @@ Clean the dataset by handling missing values across multiple tables.
 * Text inconsistency affects grouping and analysis
 * Same values with different formats behave as different data
 * Standardization is critical before applying aggregations
+
+## Day 5: Data Cleaning (Handling Invalid Values)
+### Objective
+* Identify and fix logically incorrect or invalid values in the dataset.
+### Tasks Completed
+1. Detected invalid values (negative salary, invalid age, incorrect ratings)
+2. Applied business rules to define valid ranges
+3. Replaced incorrect values using client-provided data
+4. Ensured no assumption-based fixes were applied
+### Key Learning
+* Invalid values are not always missing but logically incorrect
+* Data should be corrected using trusted sources (client/system)
+* Never blindly manipulate values without business context
