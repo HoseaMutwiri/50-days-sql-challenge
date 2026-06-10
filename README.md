@@ -75,3 +75,39 @@ Clean the dataset by handling missing values across multiple tables.
 * Invalid values are not always missing but logically incorrect
 * Data should be corrected using trusted sources (client/system)
 * Never blindly manipulate values without business context
+
+## Day 6: Data Cleaning (Outlier Detection & Handling)
+### Objective
+* Identify and handle extreme values (outliers) in the dataset.
+
+### Outlier Analysis & Updates
+
+1. High Earners Query (Above 75th Percentile)
+
+* This query filters the dataset to identify all employees whose salaries are strictly greater than the **75th percentile (Q3)**. It uses an aggregate subquery with `PERCENTILE_CONT` to dynamically calculate the threshold.
+
+```sql
+SELECT * 
+FROM challenge_50.clean_salaries
+WHERE salary > (
+    SELECT PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY salary) 
+    FROM challenge_50.clean_salaries
+);
+```
+
+2. Bulk Salary Updates
+* This script performs a targeted batch update on specific employee records. It uses a virtual table constructor (`VALUES`) to scale updates efficiently without executing multiple separate `UPDATE` statements.
+
+```sql
+UPDATE challenge_50.clean_salaries AS s
+SET salary = n.salary
+FROM (VALUES
+    (17, 35, 65000),
+    (37, 262, 97000)
+) AS n(salary_id, emp_id, salary)
+WHERE s.salary_id = n.salary_id;
+```
+
+
+### Key Learning
+* Not all outliers are errors — some are meaningful
