@@ -1,3 +1,9 @@
+# 50 DAYS SQL - PRACTICE CHALLENGE
+
+
+![CHALLENGE POSTER](datasets\results_images\qt=q_27.webp)
+
+[Datapencil challenge](https://datapencil.org/50-days-sql-challenge)
 ## Day 1: Project Setup
 
 ### Objective
