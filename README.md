@@ -117,3 +117,52 @@ WHERE s.salary_id = n.salary_id;
 
 ### Key Learning
 * Not all outliers are errors — some are meaningful
+
+# Data Cleaning Documentation: Date Standardization Pipeline
+
+## Project Overview
+This document outlines the SQL migration strategy used to standardize messy date text columns into native, clean PostgreSQL `DATE` types within the `challenge_50` schema. The pipeline targets two major tables: `clean_employees` and `clean_attendance`.
+
+---
+
+## 🧼 1. Table: challenge_50.clean_employees
+
+### Initial Verification
+To inspect the initial state, shape, and raw text formats of the employee data:
+```sql
+SELECT * FROM challenge_50.clean_employees;
+```
+
+### Structural Modification
+Added a native `DATE` column to store verified, properly structured records without altering original string columns:
+```sql
+ALTER TABLE challenge_50.clean_employees
+ADD COLUMN clean_hire_date DATE;
+```
+
+### Transformation & Transformation Logic
+Populated the new column using regex verification and explicit data range filtering to prevent standard out-of-range errors:
+```sql
+UPDATE challenge_50.clean_employees
+SET clean_hire_date = CASE
+    -- Safety Check: Flags impossible months (>12) or days (>31) directly as NULL
+    WHEN SUBSTRING(hire_date FROM 6 FOR 2)::INT > 12 OR SUBSTRING(hire_date FROM 9 FOR 2)::INT > 31 THEN NULL
+    
+    -- Format Matching & Parsing
+    WHEN hire_date ~ '^\d{4}-\d{2}-\d{2}\$' THEN TO_DATE(hire_date, 'YYYY-MM-DD')
+    WHEN hire_date ~ '^\d{2}/\d{2}/\d{4}\$' THEN TO_DATE(hire_date, 'MM/DD/YYYY')
+    WHEN hire_date ~ '^\d{2}-\d{2}-\d{4}\$' THEN TO_DATE(hire_date, 'DD-MM-YYYY')
+    
+    -- Fallback for unreadable or blank strings
+    ELSE NULL
+END;
+```
+---
+## Day 6: Data Cleaning
+### Objective: Date format fixing
+### Task completed
+* Identified inconsistent date formats in multiple columns (salary_date, attendance_date, hire_date)
+* Detected invalid values (e.g., wrong month, incomplete year, incorrect patterns)
+* Replaced incorrect dates with NULL to avoid misleading data
+* Standardized all valid dates into a uniform format (YYYY-MM-DD)
+* Ensured consistency across all date-related columns
