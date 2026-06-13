@@ -138,3 +138,11 @@ WHERE s.salary_id = n.salary_id;
 * Checked data types across all tables **(employees, departments, salary, performance, attendance)**
 * Converted columns to appropriate data types **(INT, VARCHAR, DATE, NUMERIC)**
 * Validating data types conversion
+
+---
+## Day 9: SQL Tasks
+1.  Show only employees who have a valid department
+2.  Show all employees (even without department)
+3.  Find employees without department
+4.  Find who earns how much
+5.  List salary records paid to unknown names
