@@ -199,3 +199,75 @@ FROM challenge_50.clean_employees e
 JOIN challenge_50.clean_departments d ON d.dept_id = e.dept_id 
 JOIN challenge_50.clean_salaries s ON s.emp_id = e.emp_id;
 ```
+
+---
+
+## Day 11 of the 50-Day SQL Challenge.
+The focus of today's challenge istable joins `(INNER JOIN and LEFT JOIN)`, data aggregation`(COUNT, SUM)`, and grouping techniques to extract meaningful employee insights.
+
+### Tasks and Solutions
+
+**Task 1: Employee Performance Overview**
+
+Goal:Retrieve the employee name, department, and performance ratings for the years 2022, 2023, and 2024.
+
+```sql
+SELECT 
+    e.emp_name, 
+    d.dept_name, 
+    p.rating_2022, 
+    p.rating_2023, 
+    p.rating_2024 
+FROM challenge_50.clean_employees e 
+JOIN challenge_50.clean_performance p ON p.emp_id = e.emp_id 
+JOIN challenge_50.clean_departments d ON d.dept_id = e.dept_id;
+```
+
+**Task 2: Complete Employee Profile** 
+
+Goal:Build a comprehensive profile for each employee, including their department, salary details, and historical performance ratings.
+```sql
+SELECT 
+    e.emp_name, 
+    d.dept_name, 
+    s.salary, 
+    p.rating_2022, 
+    p.rating_2023, 
+    p.rating_2024 
+FROM challenge_50.clean_employees e 
+LEFT JOIN challenge_50.clean_performance p ON p.emp_id = e.emp_id 
+JOIN challenge_50.clean_departments d ON d.dept_id = e.dept_id 
+JOIN challenge_50.clean_salaries s ON s.emp_id = e.emp_id;
+```
+
+**Task 3: Salary Record Count per Employee**
+
+Goal:Determine how many individual salary history records exist for each employee, ordered by their unique employee ID.
+
+```sql
+SELECT 
+    e.emp_id, 
+    e.emp_name, 
+    COUNT(s.salary) AS count_salary_records 
+FROM challenge_50.clean_employees e 
+LEFT JOIN challenge_50.clean_salaries s ON s.emp_id = e.emp_id 
+GROUP BY e.emp_id, e.emp_name 
+ORDER BY e.emp_id ASC;
+```
+
+**Task 4: Total Salary Expenditure per Employee**
+
+Goal: Calculate the cumulative total salary paid out to each employee across all of their available historical records.
+
+```sql
+SELECT 
+    e.emp_id, 
+    e.emp_name, 
+    SUM(s.salary) AS total_salary 
+FROM challenge_50.clean_employees e 
+LEFT JOIN challenge_50.clean_salaries s ON s.emp_id = e.emp_id 
+GROUP BY e.emp_id, e.emp_name 
+ORDER BY e.emp_id ASC;
+```
+
+---
