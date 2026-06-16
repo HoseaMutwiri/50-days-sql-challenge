@@ -271,3 +271,69 @@ ORDER BY e.emp_id ASC;
 ```
 
 ---
+## Day 12: of the 50-Day SQL Challenge.
+
+This file contains the SQL queries for the Day 10 challenges
+
+---
+
+## Task 1: Average Salary by Department
+**Goal:** Calculate the average salary for each department and sort the results from lowest to highest.
+
+```sql
+SELECT 
+    d.dept_name, 
+    ROUND(AVG(s.salary), 2) AS average_salary 
+FROM challenge_50.clean_departments AS d 
+JOIN challenge_50.clean_employees AS e ON e.dept_id = d.dept_id 
+JOIN challenge_50.clean_salaries AS s ON s.emp_id = e.emp_id 
+GROUP BY d.dept_name 
+ORDER BY average_salary;
+```
+
+---
+
+### Task 2: Employee Attendance Tracking
+**Goal:** Count how many days each employee was present using a conditional block.
+
+```sql
+SELECT 
+    e.emp_id, 
+    e.emp_name, 
+    COUNT(a.clean_attendance_date) FILTER(WHERE a.status = 'Present') AS days_present 
+FROM challenge_50.clean_employees AS e 
+LEFT JOIN challenge_50.clean_attendance AS a ON e.emp_id = a.emp_id 
+GROUP BY e.emp_id, e.emp_name 
+ORDER BY e.emp_id;
+```
+
+---
+
+### Task 3: Department Roster Grouping
+**Goal:** Collect and string-aggregate all active employee names who belong to the same department.
+
+```sql
+SELECT 
+    d.dept_name,
+    STRING_AGG(e.emp_name, ', ') AS employees
+FROM challenge_50.clean_departments AS d 
+JOIN challenge_50.clean_employees AS e ON e.dept_id = d.dept_id 
+WHERE e.emp_name != 'Unknown' 
+GROUP BY d.dept_name;
+```
+
+---
+
+### Task 4: Multi Salary Record Detection
+**Goal:** Identify employees who have more than one historical salary entry without using slow nested subqueries.
+
+
+```sql
+SELECT 
+    e.emp_name 
+FROM challenge_50.clean_employees AS e 
+JOIN challenge_50.clean_salaries AS s ON s.emp_id = e.emp_id 
+GROUP BY e.emp_id, e.emp_name 
+HAVING COUNT(s.salary) > 1;
+```
+---
