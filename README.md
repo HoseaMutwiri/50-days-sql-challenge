@@ -337,3 +337,103 @@ GROUP BY e.emp_id, e.emp_name
 HAVING COUNT(s.salary) > 1;
 ```
 ---
+## Day 13 of the 50-Day SQL Challenge.
+
+This challenge focuses on using nested subqueries and aggregate functions (`AVG`, `MAX`, `MIN`) to filter employee records based on salary thresholds from a separate table.
+
+---
+
+### 1. Employees Earning More Than Average Salary
+Retrieves names of employees whose salary is strictly above the company-wide average.
+
+```sql
+-- List employees earning more than average salary 
+SELECT e.emp_name 
+FROM challenge_50.clean_employees e 
+WHERE e.emp_id IN (
+    SELECT s.emp_id 
+    FROM challenge_50.clean_salaries s 
+    WHERE s.salary > (
+        SELECT AVG(s.salary) 
+        FROM challenge_50.clean_salaries s
+    )
+);
+```
+
+### Concept Breakdown
+* **Inner Subquery**: Calculates the statistical average salary.
+* **Outer Subquery**: Filters for employee IDs associated with above-average salaries.
+* **Main Query**: Matches those IDs to return human-readable employee names.
+
+---
+
+### 2. Employees with Maximum Salary
+Retrieves names of employees who earn the absolute highest salary in the database.
+
+```sql
+-- List employees with salary equal to maximum salary 
+SELECT e.emp_name 
+FROM challenge_50.clean_employees e 
+WHERE e.emp_id = ALL (
+    SELECT s.emp_id 
+    FROM challenge_50.clean_salaries s 
+    WHERE s.salary = (
+        SELECT MAX(s.salary) 
+        FROM challenge_50.clean_salaries s
+    )
+);
+```
+
+### Concept Breakdown
+* **Inner Subquery**: Finds the highest numeric salary value.
+* **ALL Operator**: Evaluates the main query condition against every row returned by the subquery. *(Note: If multiple employees share the max salary, `= ALL` will fail. Using `IN` is safer here).*
+
+---
+
+### 3. Employees Earning Less Than Average Salary
+Retrieves names of employees whose salary falls below the company-wide average.
+
+```sql
+-- List employees earning less than average 
+SELECT e.emp_name 
+FROM challenge_50.clean_employees e 
+WHERE e.emp_id IN (
+    SELECT s.emp_id 
+    FROM challenge_50.clean_salaries s 
+    WHERE s.salary < (
+        SELECT AVG(s.salary) 
+        FROM challenge_50.clean_salaries s
+    )
+);
+```
+
+### Concept Breakdown
+* **Aggregate Filter**: Operates identically to the first query, but reverses the comparison logic using the less-than (`<`) operator.
+
+---
+
+### 4. Employees with Minimum Salary
+Retrieves names of employees earning the absolute lowest salary in the database.
+
+```sql
+-- List employees with minimum salary 
+SELECT e.emp_name 
+FROM challenge_50.clean_employees e 
+WHERE e.emp_id = ALL (
+    SELECT s.emp_id 
+    FROM challenge_50.clean_salaries s 
+    WHERE s.salary = (
+        SELECT MIN(s.salary) 
+        FROM challenge_50.clean_salaries s
+    )
+);
+```
+
+### Concept Breakdown
+* **Aggregate Filter**: Uses `MIN` to isolate the lowest pay scale record across the dataset.
+
+---
+
+### Core SQL Summary
+* **Table Aliasing**: `clean_employees e` and `clean_salaries s` prevent column ambiguity.
+* **Subquery Nesting**: Data flows from the deepest query block upward to the final `SELECT` statement.
