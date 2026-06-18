@@ -429,11 +429,68 @@ WHERE e.emp_id = ALL (
 );
 ```
 
-### Concept Breakdown
-* **Aggregate Filter**: Uses `MIN` to isolate the lowest pay scale record across the dataset.
+---
+
+## Day 14: SQL 50 Days Challenge
+
+### **Task 1:** List employees earning more than the average salary of their respective departments.
+
+```sql
+SELECT 
+    e.dept_id, 
+    e.emp_name, 
+    s.salary 
+FROM challenge_50.clean_employees e 
+JOIN challenge_50.clean_salaries s 
+    ON s.emp_id = e.emp_id 
+WHERE salary > (
+    SELECT AVG(s2.salary) 
+    FROM challenge_50.clean_employees e2 
+    JOIN challenge_50.clean_salaries s2 
+        ON s2.emp_id = e2.emp_id 
+    WHERE e2.dept_id = e.dept_id
+);
+```
 
 ---
 
-### Core SQL Summary
-* **Table Aliasing**: `clean_employees e` and `clean_salaries s` prevent column ambiguity.
-* **Subquery Nesting**: Data flows from the deepest query block upward to the final `SELECT` statement.
+### **Task 2:** List employees whose salary is equal to the highest salary in their respective departments.
+
+```sql
+SELECT 
+    e.dept_id, 
+    e.emp_name, 
+    s.salary 
+FROM challenge_50.clean_employees e 
+JOIN challenge_50.clean_salaries s 
+    ON s.emp_id = e.emp_id 
+WHERE salary = (
+    SELECT MAX(s2.salary) 
+    FROM challenge_50.clean_employees e2 
+    JOIN challenge_50.clean_salaries s2 
+        ON s2.emp_id = e2.emp_id 
+    WHERE e2.dept_id = e.dept_id
+);
+```
+
+---
+
+### **Task 3:** List all employees whose salary is equal to the lowest salary in their respective departments.
+
+```sql
+SELECT 
+    e.dept_id, 
+    e.emp_name, 
+    s.salary 
+FROM challenge_50.clean_employees e 
+JOIN challenge_50.clean_salaries s 
+    ON s.emp_id = e.emp_id 
+WHERE salary = (
+    SELECT MIN(s2.salary) 
+    FROM challenge_50.clean_employees e2 
+    JOIN challenge_50.clean_salaries s2 
+        ON s2.emp_id = e2.emp_id 
+    WHERE e2.dept_id = e.dept_id
+);
+```
+---
