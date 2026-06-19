@@ -494,3 +494,83 @@ WHERE salary = (
 );
 ```
 ---
+
+# Day 15: SQL 50 Days Challenge
+
+Today's focus is on using semi-joins and anti-joins via `EXISTS` and `NOT EXISTS`. 
+
+### **Task 1:**  Employees With Salary Records
+This query returns all employees who have at least one corresponding record in the salaries table.
+
+```sql
+SELECT 
+    e.emp_id, 
+    e.emp_name 
+FROM 
+    challenge_50.clean_employees e 
+WHERE 
+    EXISTS (
+        SELECT 1 
+        FROM challenge_50.clean_salaries s 
+        WHERE e.emp_id = s.emp_id
+    ) 
+ORDER BY 
+    e.emp_id;
+```
+
+### **Task 2:**  Employees Without Salary Records
+This query identifies employees who have no recorded salary history.
+
+```sql
+SELECT 
+    e.emp_id,
+    e.emp_name 
+FROM 
+    challenge_50.clean_employees e 
+WHERE 
+    NOT EXISTS (
+        SELECT 1 
+        FROM challenge_50.clean_salaries s 
+        WHERE s.emp_id = e.emp_id
+    ) 
+ORDER BY 
+    e.emp_id;
+```
+
+### **Task 4:**  Employees With Attendance Records
+This query lists all employees who have logged at least one attendance entry.
+
+```sql
+SELECT 
+    e.emp_id,
+    e.emp_name 
+FROM 
+    challenge_50.clean_employees e 
+WHERE 
+    EXISTS (
+        SELECT 1 
+        FROM challenge_50.clean_attendance a 
+        WHERE a.emp_id = e.emp_id
+    ) 
+ORDER BY 
+    e.emp_id;
+```
+### **Task 5:** Employees Without Attendance Records
+
+
+```sql
+SELECT 
+    e.emp_id,
+    e.emp_name 
+FROM 
+    challenge_50.clean_employees e 
+WHERE 
+    NOT EXISTS (
+        SELECT 1 
+        FROM challenge_50.clean_attendance a 
+        WHERE a.emp_id = e.emp_id
+    ) 
+ORDER BY 
+    e.emp_id;
+```
+---
