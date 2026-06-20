@@ -577,7 +577,7 @@ ORDER BY
 
 ## Day 16: SQL 50 Days Challenge
 
-### **Task 1 :**alculate total salary paid to each employee
+### **Task 1 :** Calculate total salary paid to each employee
 
 
 ```sql
