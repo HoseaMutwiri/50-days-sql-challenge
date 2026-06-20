@@ -574,3 +574,45 @@ ORDER BY
     e.emp_id;
 ```
 ---
+
+## Day 16: SQL 50 Days Challenge
+
+### **Task 1 :**alculate total salary paid to each employee
+
+
+```sql
+SELECT 
+    e.emp_id,
+    e.emp_name, 
+    SUM(s.salary) AS total_salary_paid
+FROM challenge_50.clean_salaries s
+JOIN challenge_50.clean_employees e ON s.emp_id = e.emp_id
+GROUP BY e.emp_id, e.emp_name;
+```
+
+### **Task 2 :** Average Salary Received by Each Employee
+
+```sql
+SELECT 
+    e.emp_id,
+    e.emp_name, 
+    AVG(s.salary) AS average_salary
+FROM challenge_50.clean_salaries s
+JOIN challenge_50.clean_employees e ON s.emp_id = e.emp_id
+GROUP BY e.emp_id, e.emp_name;
+```
+
+## **Task 3.** Find maximum salary received by each employee 
+
+
+```sql
+SELECT 
+    e.emp_id,
+    e.emp_name, 
+    MAX(s.salary) AS max_salary
+FROM challenge_50.clean_salaries s
+JOIN challenge_50.clean_employees e ON s.emp_id = e.emp_id
+GROUP BY e.emp_id, e.emp_name;
+```
+
+---
