@@ -575,6 +575,7 @@ ORDER BY
 ```
 ---
 
+
 ## Day 16: SQL 50 Days Challenge
 
 ### **Task 1 :** Calculate total salary paid to each employee
@@ -615,4 +616,55 @@ JOIN challenge_50.clean_employees e ON s.emp_id = e.emp_id
 GROUP BY e.emp_id, e.emp_name;
 ```
 
+---
+
+## Day 16: SQL 50 Days Challenge
+
+## **Task 1 :** List employees with more than 2 salary records
+
+```sql
+SELECT 
+    emp_id ,
+    COUNT(*) AS emp_count FROM
+challenge_50.clean_salaries
+GROUP BY emp_id
+HAVING COUNT(*) >2;
+```
+## **Task 2 :** List departments with more than 3employees
+
+
+```sql
+SELECT 
+    dept_id,
+    COUNT(*) 
+FROM challenge_50.clean_employees
+GROUP BY dept_id
+HAVING COUNT(*) >3
+ORDER BY dept_id;
+```
+
+## **Task 3 :** List employees with total salary greater than 100000
+
+```sql
+SELECT 
+    emp_id,
+    sum(salary) AS total_salary
+FROM challenge_50.clean_salaries
+GROUP BY emp_id
+HAVING sum(salary)> 100000
+ORDER BY emp_id;
+```
+
+
+## **Task 4 :** List departments with high average salary (greater than 50000)
+
+```sql
+SELECT 
+    emp_id,
+    ROUND(AVG(salary),2) AS avg_salary
+FROM challenge_50.clean_salaries
+GROUP BY emp_id
+HAVING AVG(salary)> 50000
+ORDER BY emp_id;
+```
 ---
