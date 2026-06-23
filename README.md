@@ -618,7 +618,7 @@ GROUP BY e.emp_id, e.emp_name;
 
 ---
 
-## Day 16: SQL 50 Days Challenge
+## Day 17: SQL 50 Days Challenge
 
 ## **Task 1 :** List employees with more than 2 salary records
 
@@ -667,4 +667,70 @@ GROUP BY emp_id
 HAVING AVG(salary)> 50000
 ORDER BY emp_id;
 ```
+---
+## Day 17: SQL 50 Days Challenge
+
+### 1. High Performing Employees
+Employees with an average performance rating greater than 4.
+
+```sql
+SELECT 
+    e.emp_id, 
+    e.emp_name, 
+    d.dept_name, 
+    ROUND(((p.rating_2022 + p.rating_2023 + p.rating_2024) / 3), 0) AS performance_avg 
+FROM challenge_50.clean_employees e 
+JOIN challenge_50.clean_performance p ON p.emp_id = e.emp_id 
+JOIN challenge_50.clean_departments d ON d.dept_id = e.dept_id 
+WHERE ROUND(((p.rating_2022 + p.rating_2023 + p.rating_2024) / 3), 0) > 4;
+```
+
+### 2. High Attendance Employees
+Employees with more than 10 present days.
+
+```sql
+SELECT 
+    e.emp_id, 
+    e.emp_name, 
+    COUNT(a.status) FILTER(WHERE a.status = 'Present') AS present_days 
+FROM challenge_50.clean_employees e
+JOIN challenge_50.clean_attendance a ON e.emp_id = a.emp_id
+GROUP BY e.emp_id, e.emp_name 
+HAVING COUNT(a.status) FILTER(WHERE a.status = 'Present') > 10;
+```
+
+### 3. High Budget Departments
+Departments where the total salary paid is greater than 200,000.
+
+```sql
+SELECT 
+    d.dept_id, 
+    d.dept_name, 
+    SUM(s.salary) AS total_salary
+FROM challenge_50.clean_employees e 
+JOIN challenge_50.clean_departments d ON d.dept_id = e.dept_id 
+JOIN challenge_50.clean_salaries s ON e.emp_id = s.emp_id 
+GROUP BY d.dept_id, d.dept_name 
+HAVING SUM(s.salary) > 200000;
+```
+
+### 4. Above Average Earners
+Employees whose total salary is greater than their department's average salary.
+
+```sql
+SELECT 
+    e.emp_id, 
+    e.emp_name, 
+    SUM(s.salary) AS total_salary
+FROM challenge_50.clean_employees e 
+JOIN challenge_50.clean_salaries s ON e.emp_id = s.emp_id 
+GROUP BY e.emp_id, e.emp_name 
+HAVING SUM(s.salary) > ANY (
+    SELECT AVG(s2.salary) 
+    FROM challenge_50.clean_employees e2 
+    JOIN challenge_50.clean_salaries s2 ON e2.emp_id = s2.emp_id 
+    WHERE e2.dept_id = (SELECT dept_id FROM challenge_50.clean_employees WHERE emp_id = e.emp_id)
+);
+```
+
 ---
