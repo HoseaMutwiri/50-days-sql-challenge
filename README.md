@@ -620,7 +620,7 @@ GROUP BY e.emp_id, e.emp_name;
 
 ## Day 17: SQL 50 Days Challenge
 
-## **Task 1 :** List employees with more than 2 salary records
+### **Task 1 :** List employees with more than 2 salary records
 
 ```sql
 SELECT 
@@ -630,7 +630,7 @@ challenge_50.clean_salaries
 GROUP BY emp_id
 HAVING COUNT(*) >2;
 ```
-## **Task 2 :** List departments with more than 3employees
+### **Task 2 :** List departments with more than 3employees
 
 
 ```sql
@@ -643,7 +643,7 @@ HAVING COUNT(*) >3
 ORDER BY dept_id;
 ```
 
-## **Task 3 :** List employees with total salary greater than 100000
+### **Task 3 :** List employees with total salary greater than 100000
 
 ```sql
 SELECT 
@@ -656,7 +656,7 @@ ORDER BY emp_id;
 ```
 
 
-## **Task 4 :** List departments with high average salary (greater than 50000)
+### **Task 4 :** List departments with high average salary (greater than 50000)
 
 ```sql
 SELECT 
@@ -668,7 +668,7 @@ HAVING AVG(salary)> 50000
 ORDER BY emp_id;
 ```
 ---
-## Day 17: SQL 50 Days Challenge
+## Day 18: SQL 50 Days Challenge
 
 ### 1. High Performing Employees
 Employees with an average performance rating greater than 4.
@@ -731,6 +731,75 @@ HAVING SUM(s.salary) > ANY (
     JOIN challenge_50.clean_salaries s2 ON e2.emp_id = s2.emp_id 
     WHERE e2.dept_id = (SELECT dept_id FROM challenge_50.clean_employees WHERE emp_id = e.emp_id)
 );
+```
+
+---
+## Day 19: SQL 50 Days Challenge
+### Employee Categorization Queries
+---
+
+### 1. Salary Categorization (Low / Medium / High)
+Categorizes employees based on their current salary threshold.
+
+```sql
+SELECT 
+    emp_id,
+    salary,
+    CASE 
+        WHEN salary < 30000 THEN 'Low'
+        WHEN salary BETWEEN 30000 AND 60000 THEN 'Medium'
+        WHEN salary > 60000 THEN 'High'
+        ELSE 'N/A'
+    END AS salary_category
+FROM challenge_50.clean_salaries;
+```
+
+---
+
+### 2. Performance Categorization (Good / Average / Poor)
+Calculates the 3-year average rating (2022-2024) to determine overall performance.
+
+```sql
+SELECT 
+    emp_id,
+    CASE 
+        WHEN ((rating_2022 + rating_2023 + rating_2024) / 3.0) >= 4 THEN 'Good'
+        WHEN ((rating_2022 + rating_2023 + rating_2024) / 3.0) >= 3 THEN 'Average'
+        ELSE 'Poor'
+    END AS performance_category
+FROM challenge_50.clean_performance;
+```
+
+---
+
+### 3. Attendance Status Categorization (Active / Inactive)
+Flags employee status based on their presence record.
+
+```sql
+SELECT 
+    emp_id,
+    CASE 
+        WHEN status = 'Present' THEN 'Active'
+        ELSE 'Inactive'
+    END AS attendance_status
+FROM challenge_50.clean_attendance;
+```
+
+---
+
+### 4. Experience Level Categorization (Fresher / Mid-Level / Experienced)
+Tracks career tenure tiers based on the employee's original hire date.
+
+```sql
+SELECT 
+    emp_id,
+    clean_hire_date,
+    CASE 
+        WHEN EXTRACT(YEAR FROM AGE(NOW(), clean_hire_date)) < 2 THEN 'Fresher'
+        WHEN EXTRACT(YEAR FROM AGE(NOW(), clean_hire_date)) BETWEEN 2 AND 5 THEN 'Mid-Level'
+        ELSE 'Experienced'
+    END AS experience_level
+FROM challenge_50.clean_employees;
 ```
 
 ---
