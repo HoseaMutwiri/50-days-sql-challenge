@@ -808,4 +808,4 @@ FROM challenge_50.clean_employees;
 
 results:
 
-![task 1 day 20](datasets\results_images\day20task1.PNG)
+![task 1 day 20](datasets/results_images/day20task1.PNG)
