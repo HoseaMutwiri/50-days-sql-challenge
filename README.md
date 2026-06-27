@@ -1008,3 +1008,73 @@ SELECT
     ROUND(AVG(avg_ratings)OVER(PARTITION BY dept_id),2) avg_rating_department_wise
 FROM cte2;
 ```
+---
+
+
+## Day 22: SQL 50 Days Challenge
+
+### **Task 1:** Track Salary History
+```sql
+-- Show current salary along with previous salary for each employee
+
+SELECT 
+    emp_id,
+    salary,
+    clean_salary_date,
+    LAG(salary) OVER(PARTITION BY emp_id ORDER BY clean_salary_date) AS lag_salary
+FROM challenge_50.clean_salaries
+```
+
+### **Task 2:** Calculate Salary Variance
+
+```sql
+-- Calculate difference between current salary and previous salary
+
+SELECT 
+    emp_id,
+    salary,
+    clean_salary_date,
+    LAG(salary) OVER(PARTITION BY emp_id ORDER BY clean_salary_date) AS lag_salary,
+    (salary-LAG(salary) OVER(PARTITION BY emp_id ORDER BY clean_salary_date)) AS salary_change
+FROM challenge_50.clean_salaries;
+```
+
+### **Task 3:** Multi-Year Performance Lookback
+
+```sql
+-- Analyze attendance trend (compare current status with previous status)
+
+WITH cte2 AS 
+(
+SELECT
+    p.emp_id,
+    c.year,
+    c.rating
+FROM challenge_50.clean_performance p
+CROSS JOIN LATERAL(
+    VALUES
+        (2022,p.rating_2022),
+        (2023,p.rating_2023),
+        (2024,p.rating_2024)
+    ) AS c(year,rating)
+),
+cte3 AS
+(
+    SELECT *,
+    LAG(rating,1,0) 
+        OVER(
+        PARTITION BY emp_id ORDER BY year
+        ) AS lag_rating
+    FROM cte2
+)
+SELECT 
+*,
+LAG(lag_rating,1,0) 
+    OVER(
+    PARTITION BY emp_id ORDER BY year
+    ) AS lag_rating_2
+FROM cte3
+
+```
+
+
