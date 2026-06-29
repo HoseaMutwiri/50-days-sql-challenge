@@ -1,7 +1,9 @@
 # 50 DAYS SQL - PRACTICE CHALLENGE
 
 
-![CHALLENGE POSTER](datasets/results_images/qt=q_27.webp)
+| Performance as at 10th June  | Performance as at 15th June|
+| --- | --- |
+| ![Performance 1](datasets/results_images/performer1.PNG) | ![Performance 2](datasets/results_images/performer2.PNG) |
 
 [Datapencil challenge](https://datapencil.org/50-days-sql-challenge)
 ## Day 1: Project Setup
@@ -1011,7 +1013,7 @@ FROM cte2;
 ---
 
 
-## Day 22: SQL 50 Days Challenge
+## Day 23: SQL 50 Days Challenge
 
 ### **Task 1:** Track Salary History
 ```sql
@@ -1042,7 +1044,7 @@ FROM challenge_50.clean_salaries;
 ### **Task 3:** Multi-Year Performance Lookback
 
 ```sql
--- Analyze attendance trend (compare current status with previous status)
+-- Analyze performance trend (compare current status with previous status)
 
 WITH cte2 AS 
 (
@@ -1076,5 +1078,59 @@ LAG(lag_rating,1,0)
 FROM cte3
 
 ```
+---
+
+## Day 24: SQL 50 Days Challenge
 
 
+### **Task 1:** Salary Progression
+
+```sql
+-- Show current salary along with next salary for each employee
+
+SELECT 
+    emp_id,
+    salary_id,
+    clean_salary_date,
+    salary,
+    LEAD(salary) OVER(PARTITION BY emp_id ORDER BY clean_salary_date) as next_salary
+FROM challenge_50.clean_salaries;
+```
+
+
+### **Task 2:** Salary Growth Analysis
+
+```sql
+-- Compare current salary with next salary for growth analysiS
+
+SELECT 
+    emp_id,
+    salary_id,
+    clean_salary_date,
+    salary,
+    next_salary,
+    CONCAT(ROUND((((next_salary - salary)/salary)*100),2),'%') as salary_growth
+FROM
+(   
+    SELECT 
+        emp_id,
+        salary_id,
+        clean_salary_date,
+        salary,
+        LEAD(salary) OVER(PARTITION BY emp_id ORDER BY clean_salary_date) as next_salary
+    FROM challenge_50.clean_salarieS
+);
+
+```
+### **Task 3:** Attendance Trend Prediction
+
+```sql
+-- Predict attendance trend by comparing current and next status
+SELECT
+    attendance_id,
+    emp_id,
+    clean_attendance_date,
+    status,
+    LEAD(status) OVER(PARTITION BY emp_id ORDER BY clean_attendance_date) as next_attandance_status
+FROM challenge_50.clean_attendance;
+```

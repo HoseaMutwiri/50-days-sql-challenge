@@ -22,7 +22,7 @@ SELECT
 FROM challenge_50.clean_salaries;
 
 
--- Analyze attendance trend (compare current status with previous status)
+-- Analyze performance trend 
 
 WITH cte2 AS 
 (
