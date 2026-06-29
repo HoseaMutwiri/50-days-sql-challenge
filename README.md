@@ -2,7 +2,7 @@
 
 
 | Performance as at 10th June  | Performance as at 15th June|
-| --- | --- |
+|:--- |:--- |
 | ![Performance 1](datasets/results_images/performer1.PNG) | ![Performance 2](datasets/results_images/performer2.PNG) |
 
 [Datapencil challenge](https://datapencil.org/50-days-sql-challenge)
