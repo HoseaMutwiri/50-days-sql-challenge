@@ -1194,3 +1194,98 @@ JOIN challenge_50.clean_departments d
 ON e.dept_id = d.dept_id
 ```
 ---
+
+
+## Day 26: SQL 50 Days Challenge
+
+### **Task 1:** Departmental Salary Ranking
+
+
+```sql
+-- Find rank of employees within each department based on salary
+
+SELECT
+    e.emp_id,
+    e.emp_name,
+    e.dept_id,
+    s.salary,
+    DENSE_RANK() OVER(PARTITION BY e.dept_id ORDER BY s.salary) employee_rank
+FROM challenge_50.employees e
+JOIN challenge_50.salaries s
+ON s.emp_id = e.emp_id;
+```
+
+
+### **Task 2:** Salary Comparison Against Department Average
+
+```sql
+
+-- Compare each employee’s salary with their department average(AboveAvg/BelowAvg/Equal)
+
+WITH cte AS
+(
+    SELECT
+        e.emp_id,
+        e.emp_name,
+        e.dept_id,
+        s.salary,
+        ROUND(AVG(s.salary) OVER(PARTITION BY e.dept_id),2) dept_avg_salary
+    FROM challenge_50.employees e
+    JOIN challenge_50.salaries s
+    ON s.emp_id = e.emp_id
+)
+SELECT 
+    emp_id,
+    emp_name,
+    dept_id,
+    salary,
+    dept_avg_salary,
+    CASE WHEN salary > dept_avg_salary THEN 'AboveAvg'
+        WHEN salary < dept_avg_salary THEN 'BelowAvg'
+        WHEN salary = dept_avg_salary THEN 'Equal'
+    END saray_comparison
+FROM cte;
+```
+
+
+### **Task 3:** Top 3 Highest Paid Employees per Department
+
+```sql
+-- Find top 3 highest paid employees in each department
+
+SELECT * FROM
+(
+    SELECT
+        e.emp_id,
+        e.emp_name,
+        e.dept_id,
+        s.salary,
+        DENSE_RANK() OVER(PARTITION BY e.dept_id ORDER BY s.salary DESC) employee_rank
+    FROM challenge_50.employees e
+    JOIN challenge_50.salaries s
+    ON s.emp_id = e.emp_id
+)
+WHERE employee_rank IN (1,2,3);
+```
+
+
+### **Task 4:** Lowest Paid Employee per Department
+
+```sql
+-- Find lowest salary employee in each department
+
+SELECT * FROM
+(
+    SELECT
+        e.emp_id,
+        e.emp_name,
+        e.dept_id,
+        s.salary,
+        DENSE_RANK() OVER(PARTITION BY e.dept_id ORDER BY s.salary ASC) employee_rank
+    FROM challenge_50.employees e
+    JOIN challenge_50.salaries s
+    ON s.emp_id = e.emp_id
+)
+WHERE employee_rank = 1;
+```
+---
