@@ -1,7 +1,9 @@
 /*
+==================================================================================
 Compare each employee's salary with overall average salary 
 (> avg → Above Avg, < avg →
 Below Avg,= avg → Equal)
+==================================================================================
 */
 
 SELECT 
@@ -10,7 +12,7 @@ SELECT
     avg_salary,
     CASE WHEN salary >avg_salary THEN 'Above Avg'
         WHEN salary < avg_salary THEN 'Below Avg'
-        WHEN salary < avg_salary THEN 'Equal'
+        WHEN salary = avg_salary THEN 'Equal'
     END salary_comparison
 FROM
 (
@@ -23,9 +25,11 @@ FROM
 
 
 /*
+==================================================================================
 Compare employee salary with total salary of all employees
 (salary > 10% of total salary → High Contributor, else → Low
 Contributor)
+==================================================================================
 */
 
 SELECT 
@@ -46,9 +50,11 @@ FROM
 
 
 /*
+==================================================================================
 Compare department total salary with 
 overall total salary (dept total > 30% of total →
 High Dept, else → Low Dept)
+==================================================================================
 */
 
 
