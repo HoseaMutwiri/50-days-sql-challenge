@@ -15,7 +15,7 @@ FROM
         ROW_NUMBER() OVER(PARTITION BY emp_id ORDER BY clean_salary_date) as rank_by_latest_salary,
         SUM(salary) OVER(PARTITION BY emp_id ORDER BY clean_salary_date) as running_salary
     FROM challenge_50.clean_salaries
-)
+) AS main_data
 WHERE rank_by_latest_salary = 1 ;
 
 -- Rank employees based on salary and compare with department average salary
