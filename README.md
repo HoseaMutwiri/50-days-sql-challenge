@@ -8,6 +8,25 @@
 
 
 [Datapencil challenge](https://datapencil.org/50-days-sql-challenge)
+
+
+## Table of content
+
+| Days 1–10 | Days 11–20 | Days 21–30 | Days 31–40 | Days 41–50 |
+| :--- | :--- | :--- | :--- | :--- |
+| [Day 1: Project Setup](#day-1-project-setup) | [Day 11: Relational Integrations and Grouped Metric Aggregations](#day-11-relational-integrations-and-grouped-metric-aggregations) | [Day 21: Fetching Top-N Records](#day-21-fetching-top-n-records) | [Day 31](#day-31) | [Day 41](#day-41) |
+| [Day 2: Data Audit](#day-2-data-audit-messiness-detection) | [Day 12: Intersection Sets and Left Outer Extensions](#day-12-intersection-sets-and-left-outer-extensions) | [Day 22: Common Table Expressions and Windowed Averages](#day-22-common-table-expressions-and-windowed-averages) | [Day 32](#day-32) | [Day 42](#day-42) |
+| [Day 3: Missing Values](#day-3-data-cleaning-handling-missing-values) | [Day 13: subqueries and aggregate functions](#day-13-subqueries-and-aggregate-functions) | [Day 23: Historical Trends and Previous-Value Comparisons](#day-23-historical-trends-and-previous-value-comparisons) | [Day 33](#day-33) | [Day 43](#day-43) |
+| [Day 4: Inconsistent Text](#day-4-data-cleaning-handling-inconsistent-text) | [Day 14: Nested Query Expressions](#day-14-nested-query-expressions) | [Day 24: Sequential Trends and Next-Value Comparisons](#day-24-sequential-trends-and-next-value-comparisons) | [Day 34](#day-34) | [Day 44](#day-44) |
+| [Day 5: Invalid Values](#day-5-data-cleaning-handling-invalid-values) | [Day 15: semi-joins and anti-joins](#day-15-semi-joins-and-anti-joins) | [Day 25: Window Aggregates and Cumulative Analytics](#day-25-window-aggregates-and-cumulative-analytics) | [Day 35](#day-35) | [Day 45](#day-45) |
+| [Day 6: Outlier Detection](#day-6-data-cleaning-outlier-detection--handling) | [Day 16: Multi-Table Aggregations](#day-16-multi-table-aggregations) | [Day 26: Window Ranking Functions](#day-26-window-ranking-functions) | [Day 36](#day-36) | [Day 46](#day-46) |
+| [Day 7: Date Formatting](#day-7-data-cleaning) | [Day 17: Filtering Aggregated Result Sets](#day-17-filtering-aggregated-result-sets) | [Day 27: Conditional Query Logic](#day-27-conditional-query-logic) | [Day 37](#day-37) | [Day 47](#day-47) |
+| [Day 8: Datatypes & Spaces](#day-8-data-cleaning) | [Day 18: Multi-Table Joins and Key Matching](#day-18-multi-table-joins-and-key-matching) | [Day 28: Advanced Analytics](#day-28-advanced-analytics)| [Day 38](#day-38) | [Day 48](#day-48) |
+| [Day 9: Basic SQL Tasks](#day-9-sql-tasks) | [Day 19: Data Classification and Logical Flags](#day-19-data-classification-and-logical-flags) | [Day 29: Advanced Analytics](#day-29-advanced-analytics) | [Day 39](#day-39) | [Day 49](#day-49) |
+| [Day 10: Joins & Analysis](#day-10-joins-and-data-analysis) | [Day 20: Window Ranking Functions](#day-20-window-ranking-functions) | [Day 30](#day-30) | [Day 40](#day-40) | [Day 50](#day-50) |
+
+***
+
 ## Day 1: Project Setup
 
 ### Objective
@@ -206,16 +225,19 @@ JOIN challenge_50.clean_salaries s ON s.emp_id = e.emp_id;
 
 ---
 
-## Day 11 of the 50-Day SQL Challenge.
-The focus of today's challenge istable joins `(INNER JOIN and LEFT JOIN)`, data aggregation`(COUNT, SUM)`, and grouping techniques to extract meaningful employee insights.
+## Day 11: Relational Integrations and Grouped Metric Aggregations
+
+The focus of today's challenge is `(INNER JOIN and LEFT JOIN)`, data aggregation`(COUNT, SUM)`, and grouping techniques
 
 ### Tasks and Solutions
 
 **Task 1: Employee Performance Overview**
 
-Goal:Retrieve the employee name, department, and performance ratings for the years 2022, 2023, and 2024.
+
 
 ```sql
+
+--Retrieve the employee name, department, and performance ratings for the years 2022, 2023, and 2024.
 SELECT 
     e.emp_name, 
     d.dept_name, 
@@ -229,8 +251,11 @@ JOIN challenge_50.clean_departments d ON d.dept_id = e.dept_id;
 
 **Task 2: Complete Employee Profile** 
 
-Goal:Build a comprehensive profile for each employee, including their department, salary details, and historical performance ratings.
+
 ```sql
+
+-- Build a comprehensive profile for each employee, including their department, salary details, and historical performance ratings.
+
 SELECT 
     e.emp_name, 
     d.dept_name, 
@@ -246,9 +271,12 @@ JOIN challenge_50.clean_salaries s ON s.emp_id = e.emp_id;
 
 **Task 3: Salary Record Count per Employee**
 
-Goal:Determine how many individual salary history records exist for each employee, ordered by their unique employee ID.
+
 
 ```sql
+
+-- Determine how many individual salary history records exist for each employee, ordered by their unique employee ID.
+
 SELECT 
     e.emp_id, 
     e.emp_name, 
@@ -261,9 +289,12 @@ ORDER BY e.emp_id ASC;
 
 **Task 4: Total Salary Expenditure per Employee**
 
-Goal: Calculate the cumulative total salary paid out to each employee across all of their available historical records.
+
 
 ```sql
+-- Calculate the cumulative total salary paid out to each employee across all of their available historical records.
+
+
 SELECT 
     e.emp_id, 
     e.emp_name, 
@@ -275,16 +306,16 @@ ORDER BY e.emp_id ASC;
 ```
 
 ---
-## Day 12: of the 50-Day SQL Challenge.
-
-This file contains the SQL queries for the Day 10 challenges
+## Day 12: Intersection Sets and Left Outer Extensions
 
 ---
 
 ## Task 1: Average Salary by Department
-**Goal:** Calculate the average salary for each department and sort the results from lowest to highest.
+
 
 ```sql
+-- Calculate the average salary for each department and sort the results from lowest to highest.
+
 SELECT 
     d.dept_name, 
     ROUND(AVG(s.salary), 2) AS average_salary 
@@ -298,9 +329,11 @@ ORDER BY average_salary;
 ---
 
 ### Task 2: Employee Attendance Tracking
-**Goal:** Count how many days each employee was present using a conditional block.
+
 
 ```sql
+--  Count how many days each employee was present using a conditional block.
+
 SELECT 
     e.emp_id, 
     e.emp_name, 
@@ -314,9 +347,11 @@ ORDER BY e.emp_id;
 ---
 
 ### Task 3: Department Roster Grouping
-**Goal:** Collect and string-aggregate all active employee names who belong to the same department.
+
 
 ```sql
+-- Collect and string-aggregate all active employee names who belong to the same department.
+
 SELECT 
     d.dept_name,
     STRING_AGG(e.emp_name, ', ') AS employees
@@ -329,10 +364,11 @@ GROUP BY d.dept_name;
 ---
 
 ### Task 4: Multi Salary Record Detection
-**Goal:** Identify employees who have more than one historical salary entry without using slow nested subqueries.
+
 
 
 ```sql
+-- Identify employees who have more than one historical salary entry without using slow nested subqueries.
 SELECT 
     e.emp_name 
 FROM challenge_50.clean_employees AS e 
@@ -341,9 +377,12 @@ GROUP BY e.emp_id, e.emp_name
 HAVING COUNT(s.salary) > 1;
 ```
 ---
-## Day 13 of the 50-Day SQL Challenge.
 
-This challenge focuses on using nested subqueries and aggregate functions (`AVG`, `MAX`, `MIN`) to filter employee records based on salary thresholds from a separate table.
+## Day 13: subqueries and aggregate functions
+
+
+
+Useing subqueries and aggregate functions (`AVG`, `MAX`, `MIN`) to filter employee records based on salary thresholds from a separate table.
 
 ---
 
@@ -364,11 +403,6 @@ WHERE e.emp_id IN (
 );
 ```
 
-### Concept Breakdown
-* **Inner Subquery**: Calculates the statistical average salary.
-* **Outer Subquery**: Filters for employee IDs associated with above-average salaries.
-* **Main Query**: Matches those IDs to return human-readable employee names.
-
 ---
 
 ### 2. Employees with Maximum Salary
@@ -387,11 +421,6 @@ WHERE e.emp_id = ALL (
     )
 );
 ```
-
-### Concept Breakdown
-* **Inner Subquery**: Finds the highest numeric salary value.
-* **ALL Operator**: Evaluates the main query condition against every row returned by the subquery. *(Note: If multiple employees share the max salary, `= ALL` will fail. Using `IN` is safer here).*
-
 ---
 
 ### 3. Employees Earning Less Than Average Salary
@@ -410,9 +439,6 @@ WHERE e.emp_id IN (
     )
 );
 ```
-
-### Concept Breakdown
-* **Aggregate Filter**: Operates identically to the first query, but reverses the comparison logic using the less-than (`<`) operator.
 
 ---
 
@@ -435,7 +461,7 @@ WHERE e.emp_id = ALL (
 
 ---
 
-## Day 14: SQL 50 Days Challenge
+## Day 14: Nested Query Expressions
 
 ### **Task 1:** List employees earning more than the average salary of their respective departments.
 
@@ -499,7 +525,9 @@ WHERE salary = (
 ```
 ---
 
-# Day 15: SQL 50 Days Challenge
+
+
+## Day 15: semi-joins and anti-joins
 
 Today's focus is on using semi-joins and anti-joins via `EXISTS` and `NOT EXISTS`. 
 
@@ -580,7 +608,7 @@ ORDER BY
 ---
 
 
-## Day 16: SQL 50 Days Challenge
+## Day 16: Multi-Table Aggregations
 
 ### **Task 1 :** Calculate total salary paid to each employee
 
@@ -622,7 +650,7 @@ GROUP BY e.emp_id, e.emp_name;
 
 ---
 
-## Day 17: SQL 50 Days Challenge
+## Day 17: Filtering Aggregated Result Sets
 
 ### **Task 1 :** List employees with more than 2 salary records
 
@@ -672,7 +700,7 @@ HAVING AVG(salary)> 50000
 ORDER BY emp_id;
 ```
 ---
-## Day 18: SQL 50 Days Challenge
+## Day 18: Multi-Table Joins and Key Matching
 
 ### 1. High Performing Employees
 Employees with an average performance rating greater than 4.
@@ -738,7 +766,8 @@ HAVING SUM(s.salary) > ANY (
 ```
 
 ---
-## Day 19: SQL 50 Days Challenge
+## Day 19: Data Classification and Logical Flags
+
 ### Employee Categorization Queries
 ---
 
@@ -809,7 +838,7 @@ FROM challenge_50.clean_employees;
 ---
 
 
-## Day 20: SQL 50 Days Challenge
+## Day 20: Window Ranking Functions
 
 ### **Task 1 :** Retrieve latest salary record for each employee
 
@@ -873,7 +902,7 @@ WHERE order_rank IN (1,2);
 
 
 
-## Day 21: SQL 50 Days Challenge
+## Day 21:Fetching Top-N Records
 
 ### **Task 1 :** Rank employees based on salary
 ```SQL
@@ -950,7 +979,7 @@ LIMIT 3;
 ---
 
 
-## Day 22: SQL 50 Days Challenge
+## Day 22: Common Table Expressions and Windowed Averages
 
 
 ### **Task 1:** Show each employee with average salary of their department
@@ -1015,7 +1044,7 @@ FROM cte2;
 ---
 
 
-## Day 23: SQL 50 Days Challenge
+## Day 23: Historical Trends and Previous-Value Comparisons
 
 ### **Task 1:** Track Salary History
 ```sql
@@ -1082,7 +1111,7 @@ FROM cte3
 ```
 ---
 
-## Day 24: SQL 50 Days Challenge
+## Day 24: Sequential Trends and Next-Value Comparisons
 
 
 ### **Task 1:** Salary Progression
@@ -1140,7 +1169,7 @@ FROM challenge_50.clean_attendance;
 
 
 
-## Day 25: SQL 50 Days Challenge
+## Day 25: Window Aggregates and Cumulative Analytics
 
 ### **Task 1:** Employee Running Total Salary
 ```sql
@@ -1196,7 +1225,7 @@ ON e.dept_id = d.dept_id
 ---
 
 
-## Day 26: SQL 50 Days Challenge
+## Day 26: Window Ranking Functions
 
 ### **Task 1:** Departmental Salary Ranking
 
@@ -1292,7 +1321,7 @@ WHERE employee_rank = 1;
 
 
 
-## Day 27: SQL 50 Days Challenge
+## Day 27: Conditional Query Logic
 
 ### **Task 1:** Individual Salary vs. Overall Average
 ```sql
@@ -1393,7 +1422,7 @@ FROM
 ```
 ---
 
-## Day 28: SQL 50 Days Challenge
+## Day 28: Advanced Analytics
 
 ### **Task 1:** Top Department Earners
 ```sql
@@ -1477,9 +1506,99 @@ LIMIT 10;
 
 ```
 
-### Key SQL Concepts Used
-* **`DENSE_RANK()`**: Ranks rows without skipping numbers.
-* **`LAG()`**: Fetches data from a previous row.
-* **`PARTITION BY`**: Groups data for window calculations.
+---
 
+## Day 29: Advanced Analytics
+
+### **Task 1:** Running Salary Totals
+```sql
+-- Find latest salary per employee along with total salary till that point
+SELECT
+emp_id,
+clean_salary_date,
+salary,
+running_salary
+FROM
+(       SELECT 
+        emp_id,
+        salary_id,
+        clean_salary_date,
+        salary,
+        ROW_NUMBER() OVER(PARTITION BY emp_id ORDER BY clean_salary_date) as rank_by_latest_salary,
+        SUM(salary) OVER(PARTITION BY emp_id ORDER BY clean_salary_date) as running_salary
+    FROM challenge_50.clean_salaries
+)
+WHERE rank_by_latest_salary = 1 ;
+```
+---
+
+### **Task 2:** Department Benchmark Comparisons
+
+```sql
+-- Rank employees based on salary and compare with department average salary
+SELECT
+    emp_id,
+    clean_salary_date,
+    dept_id,
+    salary,
+    dept_avg_salary,
+    salary_diff_btwn_dept_avg_and_latest_salary
+FROM
+(SELECT 
+    e.emp_id,
+    s.clean_salary_date,
+    e.dept_id,
+    s.salary,
+    ROW_NUMBER() OVER(
+        PARTITION BY s.emp_id 
+        ORDER BY clean_salary_date
+        ) 
+        AS rank_by_latest_salary,
+    ROUND(AVG(s.salary) OVER(PARTITION BY e.dept_id),2) as dept_avg_salary,
+    (ROUND(AVG(s.salary) OVER(PARTITION BY e.dept_id),2)-salary) salary_diff_btwn_dept_avg_and_latest_salary
+FROM challenge_50.clean_salaries s
+JOIN challenge_50.clean_employees e
+ON e.emp_id = s.emp_id
+)
+WHERE rank_by_latest_salary = 1;
+---
+```
+
+### **Task 3:** Sequential Salary Trends
+
+```sql
+-- Check whether salary has increased or decreased compared to previous record
+
+SELECT 
+    emp_id, 
+    salary_id, 
+    clean_salary_date, 
+    salary, 
+    
+    -- Next salary amount
+    LEAD(salary, 1, 0) OVER(
+        PARTITION BY emp_id 
+        ORDER BY clean_salary_date
+    ) AS latest_salary, 
+    
+    -- Salary trend comparison
+    CASE 
+        WHEN LEAD(salary, 1, 0) OVER(PARTITION BY emp_id ORDER BY clean_salary_date) > salary 
+             AND LEAD(salary, 1, 0) OVER(PARTITION BY emp_id ORDER BY clean_salary_date) != 0 
+             THEN 'Increased' 
+             
+        WHEN LEAD(salary, 1, 0) OVER(PARTITION BY emp_id ORDER BY clean_salary_date) < salary 
+             AND LEAD(salary, 1, 0) OVER(PARTITION BY emp_id ORDER BY clean_salary_date) != 0 
+             THEN 'Decreased' 
+             
+        WHEN LEAD(salary, 1, 0) OVER(PARTITION BY emp_id ORDER BY clean_salary_date) = salary 
+             THEN 'No change' 
+             
+        WHEN LEAD(salary, 1, 0) OVER(PARTITION BY emp_id ORDER BY clean_salary_date) = 0 
+             THEN 'No previous salary' 
+    END AS salary_comparison 
+    
+FROM challenge_50.clean_salaries;
+
+```
 ---
