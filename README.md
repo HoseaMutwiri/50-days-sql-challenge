@@ -14,7 +14,7 @@
 
 | Days 1–10 | Days 11–20 | Days 21–30 | Days 31–40 | Days 41–50 |
 | :--- | :--- | :--- | :--- | :--- |
-| [Day 1: Project Setup](#day-1-project-setup) | [Day 11: Relational Integrations and Grouped Metric Aggregations](#day-11-relational-integrations-and-grouped-metric-aggregations) | [Day 21: Fetching Top-N Records](#day-21-fetching-top-n-records) | [Day 31](#day-31) | [Day 41](#day-41) |
+| [Day 1: Project Setup](#day-1-project-setup) | [Day 11: Relational Integrations and Grouped Metric Aggregations](#day-11-relational-integrations-and-grouped-metric-aggregations) | [Day 21: Fetching Top-N Records](#day-21-fetching-top-n-records) | [Day 31: Advanced SQL Queries & CTEs](#day-31-advanced-sql-queries--ctes) | [Day 41](#day-41) |
 | [Day 2: Data Audit](#day-2-data-audit-messiness-detection) | [Day 12: Intersection Sets and Left Outer Extensions](#day-12-intersection-sets-and-left-outer-extensions) | [Day 22: Common Table Expressions and Windowed Averages](#day-22-common-table-expressions-and-windowed-averages) | [Day 32](#day-32) | [Day 42](#day-42) |
 | [Day 3: Missing Values](#day-3-data-cleaning-handling-missing-values) | [Day 13: subqueries and aggregate functions](#day-13-subqueries-and-aggregate-functions) | [Day 23: Historical Trends and Previous-Value Comparisons](#day-23-historical-trends-and-previous-value-comparisons) | [Day 33](#day-33) | [Day 43](#day-43) |
 | [Day 4: Inconsistent Text](#day-4-data-cleaning-handling-inconsistent-text) | [Day 14: Nested Query Expressions](#day-14-nested-query-expressions) | [Day 24: Sequential Trends and Next-Value Comparisons](#day-24-sequential-trends-and-next-value-comparisons) | [Day 34](#day-34) | [Day 44](#day-44) |
@@ -1702,6 +1702,95 @@ SELECT
     diff_salary_dept_avg_salary
 FROM cte_salaries_and_employees
 WHERE diff_salary_dept_avg_salary > 0
+
+```
+---
+
+## Day 31: Advanced SQL Queries & CTEs
+
+
+---
+
+### **Task 1:** High-Earning Employees
+
+```sql
+-- Find employees whose total salary is greater than 100000
+
+-- Group By & Having
+
+SELECT 
+    emp_id,
+    SUM(salary) AS total_salary
+FROM challenge_50.clean_salaries
+GROUP BY emp_id
+HAVING SUM(salary) > 100000;
+
+
+-- ===================================================================
+-- Alternative
+-- ===================================================================
+-- CTE
+
+WITH cte AS
+(
+    SELECT emp_id,SUM(salary) AS total_salary
+    FROM challenge_50.clean_salaries
+    GROUP BY emp_id
+)
+SELECT * FROM cte WHERE total_salary>100000;
+
+```
+---
+
+### **Task 2:** Department Salary Comparison
+
+```sql
+-- Show employee salary along with department average salary using CTE
+
+
+WITH cte AS
+(
+    SELECT 
+        s.emp_id,
+        e.dept_id,
+        s.salary,
+        ROUND(AVG(s.salary) OVER(PARTITION BY e.dept_id),2) AS dept_avg_salary
+    FROM challenge_50.clean_salaries AS s
+    JOIN challenge_50.clean_employees AS e
+    ON s.emp_id = e.emp_id
+)
+SELECT * FROM cte;
+```
+
+---
+
+### **Task 3:** op Spending Department
+
+```sql
+-- Find department with highest total salary
+
+
+WITH cte2 AS
+(
+    SELECT 
+        s.emp_id,
+        e.dept_id,
+        d.dept_name,
+        s.salary,
+        SUM(s.salary) OVER(PARTITION BY e.dept_id) AS dept_total_salary
+    FROM challenge_50.clean_salaries AS s
+    JOIN challenge_50.clean_employees AS e
+    ON s.emp_id = e.emp_id
+    JOIN challenge_50.clean_departments AS d
+    ON d.dept_id = e.dept_id
+)
+SELECT
+    dept_id,
+    dept_name,
+    dept_total_salary
+FROM cte2
+ORDER BY dept_total_salary DESC
+LIMIT 1;
 
 ```
 ---
