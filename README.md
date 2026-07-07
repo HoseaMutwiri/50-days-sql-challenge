@@ -1764,7 +1764,7 @@ SELECT * FROM cte;
 
 ---
 
-### **Task 3:** op Spending Department
+### **Task 3:** Top Spending Department
 
 ```sql
 -- Find department with highest total salary
@@ -1792,5 +1792,72 @@ FROM cte2
 ORDER BY dept_total_salary DESC
 LIMIT 1;
 
+```
+---
+
+## Day 32: Database Views
+---
+Database views are virtual tables created from SQL query results. 
+
+They simplify complex queries and provide reusable code blocks.
+
+
+### **Task 1:** Create Reusable Employee View
+
+This view stores basic employee identification and location data.
+
+```sql
+CREATE VIEW challenge_50.employees_view AS 
+SELECT 
+    emp_id, 
+    emp_name, 
+    city, 
+    dept_id 
+FROM 
+    challenge_50.clean_employees;
+```
+
+### **Task 2:**  Create Salary View
+
+This view isolates financial records for easier salary tracking.
+
+```sql
+CREATE VIEW challenge_50.salary_view AS 
+SELECT 
+    emp_id, 
+    salary, 
+    clean_salary_date 
+FROM 
+    challenge_50.clean_salaries;
+```
+
+### **Task 3:**  Create Joined Employee Salary View
+
+This view combines personal and financial information across tables using an inner join.
+```sql
+CREATE VIEW challenge_50.emp_salary_view AS 
+SELECT 
+    e.emp_id, 
+    e.emp_name, 
+    e.dept_id, 
+    s.salary 
+FROM 
+    challenge_50.clean_employees e 
+JOIN 
+    challenge_50.clean_salaries s ON e.emp_id = s.emp_id;
+```
+
+### **Task 4:**  Querying the View
+
+This query filters the virtual `emp_salary_view` dataset to find high earners.
+```sql
+SELECT 
+    emp_id, 
+    emp_name, 
+    salary 
+FROM 
+    challenge_50.emp_salary_view 
+WHERE 
+    salary > 50000;
 ```
 ---
