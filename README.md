@@ -17,7 +17,7 @@
 | [Day 1: Project Setup](#day-1-project-setup) | [Day 11: Relational Integrations and Grouped Metric Aggregations](#day-11-relational-integrations-and-grouped-metric-aggregations) | [Day 21: Fetching Top-N Records](#day-21-fetching-top-n-records) | [Day 31: Advanced SQL Queries & CTEs](#day-31-advanced-sql-queries--ctes) | [Day 41](#day-41) |
 | [Day 2: Data Audit](#day-2-data-audit-messiness-detection) | [Day 12: Intersection Sets and Left Outer Extensions](#day-12-intersection-sets-and-left-outer-extensions) | [Day 22: Common Table Expressions and Windowed Averages](#day-22-common-table-expressions-and-windowed-averages) | [Day 32: Database Views part 1](#day-32-database-views-part-1) | [Day 42](#day-42) |
 | [Day 3: Missing Values](#day-3-data-cleaning-handling-missing-values) | [Day 13: subqueries and aggregate functions](#day-13-subqueries-and-aggregate-functions) | [Day 23: Historical Trends and Previous-Value Comparisons](#day-23-historical-trends-and-previous-value-comparisons) | [Day 32: Database Views part 2](#day-32-database-views-part-2) | [Day 43](#day-43) |
-| [Day 4: Inconsistent Text](#day-4-data-cleaning-handling-inconsistent-text) | [Day 14: Nested Query Expressions](#day-14-nested-query-expressions) | [Day 24: Sequential Trends and Next-Value Comparisons](#day-24-sequential-trends-and-next-value-comparisons) | [Day 34](#day-34) | [Day 44](#day-44) |
+| [Day 4: Inconsistent Text](#day-4-data-cleaning-handling-inconsistent-text) | [Day 14: Nested Query Expressions](#day-14-nested-query-expressions) | [Day 24: Sequential Trends and Next-Value Comparisons](#day-24-sequential-trends-and-next-value-comparisons) | [Day 34: SQL Database Optimization(INDEX)](#day-34-sql-database-optimizationindex) | [Day 44](#day-44) |
 | [Day 5: Invalid Values](#day-5-data-cleaning-handling-invalid-values) | [Day 15: semi-joins and anti-joins](#day-15-semi-joins-and-anti-joins) | [Day 25: Window Aggregates and Cumulative Analytics](#day-25-window-aggregates-and-cumulative-analytics) | [Day 35](#day-35) | [Day 45](#day-45) |
 | [Day 6: Outlier Detection](#day-6-data-cleaning-outlier-detection--handling) | [Day 16: Multi-Table Aggregations](#day-16-multi-table-aggregations) | [Day 26: Window Ranking Functions](#day-26-window-ranking-functions) | [Day 36](#day-36) | [Day 46](#day-46) |
 | [Day 7: Date Formatting](#day-7-data-cleaning) | [Day 17: Filtering Aggregated Result Sets](#day-17-filtering-aggregated-result-sets) | [Day 27: Conditional Query Logic](#day-27-conditional-query-logic) | [Day 37](#day-37) | [Day 47](#day-47) |
@@ -1883,7 +1883,7 @@ WHERE emp_id = 110;
 
 ```
 
-
+---
 
 ### **Task 2:** High Salary Employees View
 ```SQL
@@ -1903,7 +1903,7 @@ WHERE
     s.salary > 50000;
 
 ```
-
+---
 
 ### **Task 3:** Multi-Table View (Full Details)
 ```SQL
@@ -1924,6 +1924,7 @@ JOIN
     challenge_50.clean_departments d ON d.dept_id = e.dept_id
 
 ```
+---
 
 ### **Task 4:** HR Dashboard View
 ```SQL
@@ -1946,3 +1947,43 @@ WHERE
 ```
 
 ---
+
+## Day 34: SQL Database Optimization(INDEX)
+
+### **Task 1:** Employee ID Index
+
+```sql
+-- Create index on emp_id to speed up employee search
+
+CREATE INDEX 
+    idx_emp_id 
+ON 
+    challenge_50.clean_employees(emp_id)
+
+```
+
+
+
+### **Task 2:** Department ID Index
+```sql
+-- Create index on deptid for faster department-based filtering
+
+CREATE INDEX 
+    idx_dept_id 
+ON 
+    challenge_50.clean_departments(dept_id)
+```
+
+
+### **Task 3:** Salaries Composite Index
+
+
+```sql
+-- Create composite index on (emp_id, salary_date) for optimized multi-column queries
+
+CREATE INDEX 
+    idx_emp_id_salary_date
+ON 
+    challenge_50.clean_salaries(emp_id,clean_salary_date)
+
+```
