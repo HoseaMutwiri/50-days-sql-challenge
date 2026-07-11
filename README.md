@@ -19,7 +19,7 @@
 | [Day 3: Missing Values](#day-3-data-cleaning-handling-missing-values) | [Day 13: subqueries and aggregate functions](#day-13-subqueries-and-aggregate-functions) | [Day 23: Historical Trends and Previous-Value Comparisons](#day-23-historical-trends-and-previous-value-comparisons) | [Day 32: Database Views part 2](#day-32-database-views-part-2) | [Day 43](#day-43) |
 | [Day 4: Inconsistent Text](#day-4-data-cleaning-handling-inconsistent-text) | [Day 14: Nested Query Expressions](#day-14-nested-query-expressions) | [Day 24: Sequential Trends and Next-Value Comparisons](#day-24-sequential-trends-and-next-value-comparisons) | [Day 34: SQL Database Optimization(INDEX)](#day-34-sql-database-optimizationindex) | [Day 44](#day-44) |
 | [Day 5: Invalid Values](#day-5-data-cleaning-handling-invalid-values) | [Day 15: semi-joins and anti-joins](#day-15-semi-joins-and-anti-joins) | [Day 25: Window Aggregates and Cumulative Analytics](#day-25-window-aggregates-and-cumulative-analytics) | [Day 35: Database Query Optimization Part 2](#day-35-database-query-optimization-part-2) | [Day 45](#day-45) |
-| [Day 6: Outlier Detection](#day-6-data-cleaning-outlier-detection--handling) | [Day 16: Multi-Table Aggregations](#day-16-multi-table-aggregations) | [Day 26: Window Ranking Functions](#day-26-window-ranking-functions) | [Day 36](#day-36) | [Day 46](#day-46) |
+| [Day 6: Outlier Detection](#day-6-data-cleaning-outlier-detection--handling) | [Day 16: Multi-Table Aggregations](#day-16-multi-table-aggregations) | [Day 26: Window Ranking Functions](#day-26-window-ranking-functions) | [Day 36: Stored procedures](#day-36-stored-procedures) | [Day 46](#day-46) |
 | [Day 7: Date Formatting](#day-7-data-cleaning) | [Day 17: Filtering Aggregated Result Sets](#day-17-filtering-aggregated-result-sets) | [Day 27: Conditional Query Logic](#day-27-conditional-query-logic) | [Day 37](#day-37) | [Day 47](#day-47) |
 | [Day 8: Datatypes & Spaces](#day-8-data-cleaning) | [Day 18: Multi-Table Joins and Key Matching](#day-18-multi-table-joins-and-key-matching) | [Day 28: Advanced Analytics](#day-28-advanced-analytics)| [Day 38](#day-38) | [Day 48](#day-48) |
 | [Day 9: Basic SQL Tasks](#day-9-sql-tasks) | [Day 19: Data Classification and Logical Flags](#day-19-data-classification-and-logical-flags) | [Day 29: Advanced Analytics](#day-29-advanced-analytics) | [Day 39](#day-39) | [Day 49](#day-49) |
@@ -2097,5 +2097,141 @@ Compare query performance before and after applying index on emp_id
 
 ![After indexing](datasets/results_images/after_indexing.PNG)
 
+
+---
+
+## Day 36: Stored procedures
+
+
+### **Task 1:** Create a procedure to get all employee data
+
+```sql
+
+-- Create the Procedure
+CREATE OR REPLACE PROCEDURE challenge_50.get_all_data(INOUT p_result REFCURSOR)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    OPEN p_result FOR
+    SELECT 
+        emp_id,
+        emp_name,
+        age,
+        city,
+        dept_id
+    FROM 
+        challenge_50.clean_employees;
+END;
+$$;
+
+
+-- Execute and Fetch Results
+
+BEGIN;
+CALL challenge_50.get_all_data('my_data_cursor');
+FETCH ALL FROM "my_data_cursor";
+COMMIT;
+
+```
+
+
+### **Task 2:** Create a procedure with input parameter to find employee by emp_id
+
+
+```sql
+-- Create the Procedure
+
+CREATE OR REPLACE PROCEDURE get_employee(IN emp_id_input INT,INOUT p_results REFCURSOR)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    OPEN p_results FOR
+    SELECT * FROM challenge_50.clean_employees
+    WHERE emp_id = emp_id_input;
+END;
+$$;
+
+
+-- Execute and Fetch Results
+
+BEGIN;
+CALL get_employee(50,'my_data');
+FETCH ALL FROM "my_data";
+COMMIT;
+
+```
+
+
+### **Task 3:** Create a procedure using JOIN to fetch employee and salary details
+
+
+```sql
+-- Create the Procedure
+
+CREATE OR REPLACE PROCEDURE challenge_50.get_emp_salary_data(INOUT p_result REFCURSOR)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    OPEN p_result FOR
+    SELECT 
+        e.emp_id,
+        e.emp_name,
+        e.age,
+        e.city,
+        e.dept_id,
+        e.clean_hire_date,
+        s.salary,
+        s.clean_salary_date
+    FROM 
+        challenge_50.clean_employees e
+    JOIN 
+        challenge_50.clean_salaries s ON e.emp_id = s.emp_id;
+END;
+$$;
+
+-- Execute and Fetch Results
+
+
+BEGIN;
+CALL challenge_50.get_emp_salary_data('my_data');
+FETCH ALL FROM "my_data";
+COMMIT;
+
+```
+
+### **Task 4:** Create a procedure for salary report (employees with salary > 50000)
+
+
+```sql
+-- Create the Procedure
+
+CREATE PROCEDURE get_high_salaries(INOUT p_result REFCURSOR)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    OPEN p_result FOR
+    SELECT 
+        e.emp_id,
+        e.emp_name,
+        e.age,
+        e.city,
+        s.salary
+    FROM 
+        challenge_50.clean_employees e
+    JOIN 
+        challenge_50.clean_salaries s ON e.emp_id = s.emp_id
+    WHERE s.salary>50000;
+END;
+$$;
+
+
+-- Execute and Fetch Results
+
+
+BEGIN;
+CALL get_high_salaries('my_data');
+FETCH ALL FROM my_data;
+COMMIT;
+```
 
 ---
