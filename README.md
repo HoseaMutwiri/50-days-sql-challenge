@@ -19,8 +19,8 @@
 | [Day 3: Missing Values](#day-3-data-cleaning-handling-missing-values) | [Day 13: subqueries and aggregate functions](#day-13-subqueries-and-aggregate-functions) | [Day 23: Historical Trends and Previous-Value Comparisons](#day-23-historical-trends-and-previous-value-comparisons) | [Day 32: Database Views part 2](#day-32-database-views-part-2) | [Day 43](#day-43) |
 | [Day 4: Inconsistent Text](#day-4-data-cleaning-handling-inconsistent-text) | [Day 14: Nested Query Expressions](#day-14-nested-query-expressions) | [Day 24: Sequential Trends and Next-Value Comparisons](#day-24-sequential-trends-and-next-value-comparisons) | [Day 34: SQL Database Optimization(INDEX)](#day-34-sql-database-optimizationindex) | [Day 44](#day-44) |
 | [Day 5: Invalid Values](#day-5-data-cleaning-handling-invalid-values) | [Day 15: semi-joins and anti-joins](#day-15-semi-joins-and-anti-joins) | [Day 25: Window Aggregates and Cumulative Analytics](#day-25-window-aggregates-and-cumulative-analytics) | [Day 35: Database Query Optimization Part 2](#day-35-database-query-optimization-part-2) | [Day 45](#day-45) |
-| [Day 6: Outlier Detection](#day-6-data-cleaning-outlier-detection--handling) | [Day 16: Multi-Table Aggregations](#day-16-multi-table-aggregations) | [Day 26: Window Ranking Functions](#day-26-window-ranking-functions) | [Day 36: Stored procedures](#day-36-stored-procedures) | [Day 46](#day-46) |
-| [Day 7: Date Formatting](#day-7-data-cleaning) | [Day 17: Filtering Aggregated Result Sets](#day-17-filtering-aggregated-result-sets) | [Day 27: Conditional Query Logic](#day-27-conditional-query-logic) | [Day 37](#day-37) | [Day 47](#day-47) |
+| [Day 6: Outlier Detection](#day-6-data-cleaning-outlier-detection--handling) | [Day 16: Multi-Table Aggregations](#day-16-multi-table-aggregations) | [Day 26: Window Ranking Functions](#day-26-window-ranking-functions) | [Day 36: Stored procedures part 1](#day-36-stored-procedures-part-1) | [Day 46](#day-46) |
+| [Day 7: Date Formatting](#day-7-data-cleaning) | [Day 17: Filtering Aggregated Result Sets](#day-17-filtering-aggregated-result-sets) | [Day 27: Conditional Query Logic](#day-27-conditional-query-logic) | [Day 37: Stored procedures part 2](#day-37-stored-procedures-part-2) | [Day 47](#day-47) |
 | [Day 8: Datatypes & Spaces](#day-8-data-cleaning) | [Day 18: Multi-Table Joins and Key Matching](#day-18-multi-table-joins-and-key-matching) | [Day 28: Advanced Analytics](#day-28-advanced-analytics)| [Day 38](#day-38) | [Day 48](#day-48) |
 | [Day 9: Basic SQL Tasks](#day-9-sql-tasks) | [Day 19: Data Classification and Logical Flags](#day-19-data-classification-and-logical-flags) | [Day 29: Advanced Analytics](#day-29-advanced-analytics) | [Day 39](#day-39) | [Day 49](#day-49) |
 | [Day 10: Joins & Analysis](#day-10-joins-and-data-analysis) | [Day 20: Window Ranking Functions](#day-20-window-ranking-functions) | [Day 30: Common Table Expressions and Windowed Functions](#day-30-common-table-expressions-and-windowed-functions) | [Day 40](#day-40) | [Day 50](#day-50) |
@@ -2100,7 +2100,7 @@ Compare query performance before and after applying index on emp_id
 
 ---
 
-## Day 36: Stored procedures
+## Day 36: Stored procedures part 1
 
 
 ### **Task 1:** Create a procedure to get all employee data
@@ -2234,4 +2234,121 @@ FETCH ALL FROM my_data;
 COMMIT;
 ```
 
+---
+
+## Day 37: Stored procedures part 2
+
+### **Task 1:** Create procedure with IF condition to return message based on salary
+
+
+```sql
+
+-- Create the Procedure
+
+CREATE OR REPLACE PROCEDURE check_salary(IN employee_id INT,INOUT p_result TEXT DEFAULT '')
+
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_salary NUMERIC;
+BEGIN
+    SELECT salary INTO v_salary
+    FROM 
+        challenge_50.clean_salaries
+    WHERE 
+        emp_id = employee_id;
+
+    IF NOT FOUND THEN 
+        p_result := 'Employee ID not found';
+    RETURN;
+    END IF;
+
+    IF v_salary > 50000 THEN
+        p_result := 'High salary';
+
+    ELSE 
+        p_result := 'Low salary';
+    END IF;
+
+END;
+$$;
+
+
+-- Execute and Fetch Results
+
+CALL check_salary(200);
+
+
+```
+---
+
+### **Task 2:** Create procedure with CASE statement to categorize employees(High/Medium/Low)
+
+
+
+```sql
+-- Create the Procedure
+
+CREATE OR REPLACE PROCEDURE salary_category(INOUT p_result REFCURSOR)
+
+LANGUAGE plpgsql
+
+AS $$
+
+BEGIN
+
+OPEN p_result FOR
+SELECT emp_id,
+salary,
+CASE WHEN salary >= 70000 THEN 'High'
+    WHEN salary < 70000 AND salary > 40000 THEN 'Medium'
+    WHEN salary <= 40000 THEN 'Low'
+END
+FROM challenge_50.clean_salaries;
+
+END;
+$$;
+
+
+-- Execute and Fetch Results
+
+BEGIN;
+CALL salary_category('my_data');
+FETCH ALL FROM my_data;
+COMMIT;
+```
+
+
+### **Task 3:** Create procedure with aggregation to calculate total salary per employee
+
+```sql
+-- Create the Procedure
+
+CREATE OR REPLACE PROCEDURE total_salary(INOUT p_results REFCURSOR)
+LANGUAGE plpgsql
+
+AS $$
+
+BEGIN
+
+OPEN p_results FOR
+SELECT 
+    emp_id,
+    SUM(salary) AS total_salary_per_employee
+FROM challenge_50.clean_salaries
+GROUP BY emp_id
+ORDER BY 2 DESC;
+
+END;
+$$;
+
+
+-- Execute and Fetch Results
+
+
+BEGIN;
+CALL total_salary('my_data2');
+FETCH ALL FROM my_data2;
+COMMIT;
+```
 ---
