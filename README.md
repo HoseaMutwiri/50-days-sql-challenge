@@ -21,7 +21,7 @@
 | [Day 5: Invalid Values](#day-5-data-cleaning-handling-invalid-values) | [Day 15: semi-joins and anti-joins](#day-15-semi-joins-and-anti-joins) | [Day 25: Window Aggregates and Cumulative Analytics](#day-25-window-aggregates-and-cumulative-analytics) | [Day 35: Database Query Optimization Part 2](#day-35-database-query-optimization-part-2) | [Day 45](#day-45) |
 | [Day 6: Outlier Detection](#day-6-data-cleaning-outlier-detection--handling) | [Day 16: Multi-Table Aggregations](#day-16-multi-table-aggregations) | [Day 26: Window Ranking Functions](#day-26-window-ranking-functions) | [Day 36: Stored procedures part 1](#day-36-stored-procedures-part-1) | [Day 46](#day-46) |
 | [Day 7: Date Formatting](#day-7-data-cleaning) | [Day 17: Filtering Aggregated Result Sets](#day-17-filtering-aggregated-result-sets) | [Day 27: Conditional Query Logic](#day-27-conditional-query-logic) | [Day 37: Stored procedures part 2](#day-37-stored-procedures-part-2) | [Day 47](#day-47) |
-| [Day 8: Datatypes & Spaces](#day-8-data-cleaning) | [Day 18: Multi-Table Joins and Key Matching](#day-18-multi-table-joins-and-key-matching) | [Day 28: Advanced Analytics](#day-28-advanced-analytics)| [Day 38](#day-38) | [Day 48](#day-48) |
+| [Day 8: Datatypes & Spaces](#day-8-data-cleaning) | [Day 18: Multi-Table Joins and Key Matching](#day-18-multi-table-joins-and-key-matching) | [Day 28: Advanced Analytics](#day-28-advanced-analytics)| [Day 38: Triggers Before Update and After Insert](#day-38-triggers-before-update-and-after-insert) | [Day 48](#day-48) |
 | [Day 9: Basic SQL Tasks](#day-9-sql-tasks) | [Day 19: Data Classification and Logical Flags](#day-19-data-classification-and-logical-flags) | [Day 29: Advanced Analytics](#day-29-advanced-analytics) | [Day 39](#day-39) | [Day 49](#day-49) |
 | [Day 10: Joins & Analysis](#day-10-joins-and-data-analysis) | [Day 20: Window Ranking Functions](#day-20-window-ranking-functions) | [Day 30: Common Table Expressions and Windowed Functions](#day-30-common-table-expressions-and-windowed-functions) | [Day 40](#day-40) | [Day 50](#day-50) |
 
@@ -2284,7 +2284,7 @@ CALL check_salary(200);
 
 ### **Task 2:** Create procedure with CASE statement to categorize employees(High/Medium/Low)
 
-
+---
 
 ```sql
 -- Create the Procedure
@@ -2318,6 +2318,7 @@ FETCH ALL FROM my_data;
 COMMIT;
 ```
 
+---
 
 ### **Task 3:** Create procedure with aggregation to calculate total salary per employee
 
@@ -2350,5 +2351,109 @@ BEGIN;
 CALL total_salary('my_data2');
 FETCH ALL FROM my_data2;
 COMMIT;
+```
+---
+
+## Day 38: Triggers Before Update and After Insert
+
+### **Task 1:** Enforcing Data Integrity (Prevent Negative Salaries)
+
+```SQL
+-- Create BEFORE UPDATE trigger to prevent negative salary updates
+
+CREATE OR REPLACE FUNCTION challenge_50.prevent_negative_salary()
+
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.salary < 0 THEN
+        NEW.salary := OLD.salary;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE TRIGGER salary_update_trigger
+BEFORE UPDATE
+ON
+challenge_50.clean_salaries
+FOR EACH ROW
+EXECUTE FUNCTION challenge_50.prevent_negative_salary();
+
+
+UPDATE challenge_50.clean_salaries
+SET salary = -50000
+WHERE emp_id = 164;
+
+
+SELECT * FROM challenge_50.clean_salaries
+WHERE emp_id = 164;
+```
+---
+
+### **Task 2:** Automated Activity Logging (Attendance Records)
+
+
+```SQL
+-- Create AFTER INSERT trigger to log attendance records automatically
+CREATE OR REPLACE FUNCTION challenge_50.attendance_logs_update()
+RETURNS TRIGGER AS $$
+BEGIN
+CREATE TABLE IF NOT EXISTS challenge_50.attendance_logs (
+    attendance_id INT,
+    emp_id INT,
+    status VARCHAR(50),
+    clean_attendance_date DATE,
+    MESSAGE TEXT);
+INSERT INTO challenge_50.attendance_logs(
+    attendance_id,
+    emp_id,
+    status,
+    clean_attendance_date,
+    MESSAGE)
+    VALUES(NEW.attendance_id,NEW.emp_id,NEW.status,NEW.clean_attendance_date,'attendance added');
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE TRIGGER attendance_insert_trigger
+AFTER INSERT
+ON
+challenge_50.clean_attendance
+FOR EACH ROW
+EXECUTE FUNCTION challenge_50.attendance_logs_update();
+
+```
+
+
+### **Task 3:** Testing and Verification
+
+#### Scenario A: Verifying Automated Logging
+
+```sql
+-- Store attendance activity inside attendance_logs table
+
+INSERT INTO challenge_50.clean_attendance VALUES(2000,101,'Present','2026-07-13')
+
+SELECT * FROM challenge_50.attendance_logs;
+```
+
+---
+
+#### Scenario B: Attempting Negative Data Input
+
+```SQL
+-- Test trigger execution using UPDATE and INSERT operations
+
+UPDATE challenge_50.clean_salaries
+SET salary = -50000
+WHERE emp_id = 164;
+
+SELECT * FROM challenge_50.clean_salaries
+WHERE emp_id = 164;
+
 ```
 ---
