@@ -22,7 +22,7 @@
 | [Day 6: Outlier Detection](#day-6-data-cleaning-outlier-detection--handling) | [Day 16: Multi-Table Aggregations](#day-16-multi-table-aggregations) | [Day 26: Window Ranking Functions](#day-26-window-ranking-functions) | [Day 36: Stored procedures part 1](#day-36-stored-procedures-part-1) | [Day 46](#day-46) |
 | [Day 7: Date Formatting](#day-7-data-cleaning) | [Day 17: Filtering Aggregated Result Sets](#day-17-filtering-aggregated-result-sets) | [Day 27: Conditional Query Logic](#day-27-conditional-query-logic) | [Day 37: Stored procedures part 2](#day-37-stored-procedures-part-2) | [Day 47](#day-47) |
 | [Day 8: Datatypes & Spaces](#day-8-data-cleaning) | [Day 18: Multi-Table Joins and Key Matching](#day-18-multi-table-joins-and-key-matching) | [Day 28: Advanced Analytics](#day-28-advanced-analytics)| [Day 38: Triggers Before Update and After Insert](#day-38-triggers-before-update-and-after-insert) | [Day 48](#day-48) |
-| [Day 9: Basic SQL Tasks](#day-9-sql-tasks) | [Day 19: Data Classification and Logical Flags](#day-19-data-classification-and-logical-flags) | [Day 29: Advanced Analytics](#day-29-advanced-analytics) | [Day 39](#day-39) | [Day 49](#day-49) |
+| [Day 9: Basic SQL Tasks](#day-9-sql-tasks) | [Day 19: Data Classification and Logical Flags](#day-19-data-classification-and-logical-flags) | [Day 29: Advanced Analytics](#day-29-advanced-analytics) | [Day 39: Triggers Functions](#day-39-triggers-functions) | [Day 49](#day-49) |
 | [Day 10: Joins & Analysis](#day-10-joins-and-data-analysis) | [Day 20: Window Ranking Functions](#day-20-window-ranking-functions) | [Day 30: Common Table Expressions and Windowed Functions](#day-30-common-table-expressions-and-windowed-functions) | [Day 40](#day-40) | [Day 50](#day-50) |
 
 ***
@@ -2457,3 +2457,105 @@ WHERE emp_id = 164;
 
 ```
 ---
+
+
+## Day 39: Triggers Functions
+
+
+### **Task 1:** Create BEFORE INSERT trigger to prevent negative salary insertion
+
+```sql
+-- Create the Trigger Function
+
+CREATE OR REPLACE FUNCTION challenge_50.prevent_negative_salary_before_insert() 
+RETURNS TRIGGER AS $$ 
+BEGIN 
+    IF NEW.salary < 0 THEN 
+        NEW.salary := 0;
+    END IF; 
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+```
+
+### **Task 2:** Create the trigger bound to challenge_50.clean_salaries table
+
+```sql
+-- Create the Trigger
+
+CREATE OR REPLACE TRIGGER negative_salary_insert_trigger 
+BEFORE INSERT ON challenge_50.clean_salaries 
+FOR EACH ROW 
+EXECUTE FUNCTION challenge_50.prevent_negative_salary_before_insert();
+```
+
+### **Task 3:** Automatically convert negative salary values to 0 before inserting data
+
+```sql
+INSERT INTO challenge_50.clean_salaries 
+VALUES (2500, 2004, -50000, '2026-07-14');
+
+-- test and validate
+
+SELECT * FROM challenge_50.clean_salaries
+WHERE emp_id = 2004
+```
+
+
+### **Task 4:** Create AFTER UPDATE trigger to track salary changes
+
+
+#### Step 1: Create the log table outside the trigger
+```sql
+
+CREATE TABLE IF NOT EXISTS challenge_50.salary_update_logs (
+    salary_id INT,
+    employee_id INT,
+    salary NUMERIC(10,2),
+    clean_salary_date DATE,
+    change_date TIMESTAMP,
+    message TEXT
+);
+```
+#### Step 2: Create the Trigger Function
+
+```sql
+CREATE OR REPLACE FUNCTION challenge_50.salary_update_logs_function()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO challenge_50.salary_update_logs (salary_id, employee_id, salary, clean_salary_date, change_date, message)
+    VALUES (
+        OLD.salary_id,
+        OLD.emp_id,
+        NEW.salary,
+        OLD.clean_salary_date,
+        NOW(),
+        'salary record updated'
+    );
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+#### Step 3: Create the Trigger
+
+```sql
+CREATE OR REPLACE TRIGGER salary_logs_trigger
+AFTER UPDATE ON challenge_50.clean_salaries
+FOR EACH ROW
+EXECUTE FUNCTION challenge_50.salary_update_logs_function();
+```
+
+### **Task 5:** Store old salary and new salary records inside salary_logs table
+
+```sql
+-- Update the record to fire the trigger
+UPDATE challenge_50.clean_salaries
+SET salary = 700000
+WHERE salary_id = 2;
+
+-- View logged changes
+
+SELECT * FROM challenge_50.salary_update_logs;
+```
