@@ -23,7 +23,7 @@
 | [Day 7: Date Formatting](#day-7-data-cleaning) | [Day 17: Filtering Aggregated Result Sets](#day-17-filtering-aggregated-result-sets) | [Day 27: Conditional Query Logic](#day-27-conditional-query-logic) | [Day 37: Stored procedures part 2](#day-37-stored-procedures-part-2) | [Day 47](#day-47) |
 | [Day 8: Datatypes & Spaces](#day-8-data-cleaning) | [Day 18: Multi-Table Joins and Key Matching](#day-18-multi-table-joins-and-key-matching) | [Day 28: Advanced Analytics](#day-28-advanced-analytics)| [Day 38: Triggers Before Update and After Insert](#day-38-triggers-before-update-and-after-insert) | [Day 48](#day-48) |
 | [Day 9: Basic SQL Tasks](#day-9-sql-tasks) | [Day 19: Data Classification and Logical Flags](#day-19-data-classification-and-logical-flags) | [Day 29: Advanced Analytics](#day-29-advanced-analytics) | [Day 39: Triggers Functions](#day-39-triggers-functions) | [Day 49](#day-49) |
-| [Day 10: Joins & Analysis](#day-10-joins-and-data-analysis) | [Day 20: Window Ranking Functions](#day-20-window-ranking-functions) | [Day 30: Common Table Expressions and Windowed Functions](#day-30-common-table-expressions-and-windowed-functions) | [Day 40](#day-40) | [Day 50](#day-50) |
+| [Day 10: Joins & Analysis](#day-10-joins-and-data-analysis) | [Day 20: Window Ranking Functions](#day-20-window-ranking-functions) | [Day 30: Common Table Expressions and Windowed Functions](#day-30-common-table-expressions-and-windowed-functions) | [Day 40: Creating Temporary Tables](#day-40-creating-temporary-tables) | [Day 50](#day-50) |
 
 ***
 
@@ -2559,3 +2559,56 @@ WHERE salary_id = 2;
 
 SELECT * FROM challenge_50.salary_update_logs;
 ```
+
+---
+
+
+## Day 40: Creating Temporary Tables
+
+### **Task 1:** Environment Setup and Table Staging
+
+```SQL
+-- Set the schema search path
+SET search_path TO challenge_50;
+
+-- Create temporary table for employee salary summary
+CREATE TEMPORARY TABLE temporary_salary_table (
+    emp_id INT, 
+    total_salary NUMERIC(10, 2)
+);
+```
+
+
+### **Task 2:** Data Aggregation & Ingestion
+```SQL
+-- Insert aggregated salary data into temporary table
+
+INSERT INTO temporary_salary_table(emp_id,total_salary)
+SELECT 
+    emp_id,
+    SUM(salary)
+FROM 
+    challenge_50.clean_salaries
+GROUP BY emp_id;
+```
+
+### **Task 3:** Final Report Generation
+
+```SQL
+-- Join temporary table with employee table to fetch employee details
+select * from temporary_salary_table;
+
+SELECT e.emp_id, e.emp_name, t.total_salary
+FROM challenge_50.clean_employees e
+JOIN temporary_salary_table t
+ON e.emp_id = t.emp_id;
+```
+
+### **Task 4:** Resource Cleanup
+
+```SQL
+-- Drop temporary table after usage
+
+DROP TABLE temporary_salary_table;
+```
+---
