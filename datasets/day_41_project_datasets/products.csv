@@ -1,0 +1,101 @@
+product_id,product_name,category,price
+1,Wooden Dining Table,Home,37915.02
+2,Refrigerator,Electronics,44399.19
+3,Refrigerator,Beauty,1885.34
+4,Wooden Dining Table,Home,63720.01
+5,Coffee Maker,Home,5736.41
+6,Coffee Maker,Home,33502.85
+7,Makeup Kit,Electronics,46264.08
+8,Samsung Galaxy S23,Electronics,46118.33
+9,iPhone 14,Electronics,72225.59
+10,LED TV 42 inch,Home,60147.75
+11,iPhone 14,Home,46826.8
+12,Laptop Dell XPS,Electronics,67847.81
+13,Laptop Dell XPS,Home,40256.31
+14,Smart Watch,Electronics,73846.25
+15,Refrigerator,Home,29187.67
+16,Nike Running Shoes,Clothing,47371.99
+17,Bluetooth Headphones,Home,69410.17
+18,Bluetooth Headphones,Home,79654.26
+19,Air Conditioner,Home,48902.59
+20,iPhone 14,Electronics,61520.17
+21,Adidas Hoodie,Home,60490.52
+22,Bluetooth Headphones,Home,46114.81
+23,Coffee Maker,Electronics,6455.68
+24,Nike Running Shoes,Home,33396.94
+25,Nike Running Shoes,Home,44291.4
+26,Gaming Mouse,Home,19170.7
+27,Samsung Galaxy S23,Home,57875.51
+28,iPhone 14,Home,63098.27
+29,Smart Watch,Clothing,65850.3
+30,Samsung Galaxy S23,Home,27503.4
+31,Wooden Dining Table,Clothing,3302.51
+32,Air Conditioner,Home,64024.97
+33,iPhone 14,Electronics,79147.98
+34,Bluetooth Headphones,Clothing,71006.18
+35,iPhone 14,Beauty,15157.47
+36,Refrigerator,Clothing,19010.7
+37,Coffee Maker,Clothing,77915.53
+38,Makeup Kit,Electronics,57862.82
+39,Laptop Dell XPS,Clothing,62622.0
+40,LED TV 42 inch,Beauty,27126.57
+41,Coffee Maker,Home,17971.65
+42,Refrigerator,Electronics,1609.02
+43,Laptop Dell XPS,Electronics,13568.97
+44,Refrigerator,Electronics,1229.63
+45,Smart Watch,Electronics,42182.13
+46,Nike Running Shoes,Electronics,75695.12
+47,Adidas Hoodie,Clothing,35717.69
+48,Adidas Hoodie,Beauty,40718.54
+49,LED TV 42 inch,Beauty,75583.65
+50,Samsung Galaxy S23,Clothing,47748.44
+51,Adidas Hoodie,Home,76455.85
+52,Coffee Maker,Beauty,49286.22
+53,LED TV 42 inch,Electronics,39243.54
+54,Refrigerator,Electronics,52903.08
+55,Coffee Maker,Beauty,66271.54
+56,Coffee Maker,Home,27441.79
+57,Gaming Mouse,Beauty,16025.84
+58,Makeup Kit,Beauty,76182.7
+59,Air Conditioner,Beauty,48197.4
+60,Office Chair,Beauty,48495.96
+61,Nike Running Shoes,Home,54213.08
+62,Makeup Kit,Home,45294.0
+63,Smart Watch,Beauty,48786.87
+64,Wooden Dining Table,Home,25164.34
+65,Coffee Maker,Electronics,62662.28
+66,Laptop Dell XPS,Home,18955.43
+67,Laptop Dell XPS,Clothing,56110.61
+68,Refrigerator,Home,55853.72
+69,Gaming Mouse,Clothing,31019.65
+70,Bluetooth Headphones,Electronics,51534.78
+71,LED TV 42 inch,Electronics,20836.44
+72,Makeup Kit,Electronics,24861.98
+73,iPhone 14,Home,27383.62
+74,Coffee Maker,Electronics,17080.77
+75,Samsung Galaxy S23,Home,10030.95
+76,Air Conditioner,Electronics,10705.01
+77,Office Chair,Home,76778.49
+78,Coffee Maker,Home,18989.48
+79,Gaming Mouse,Clothing,60564.49
+80,Smart Watch,Home,24549.96
+81,Bluetooth Headphones,Beauty,74207.59
+82,Laptop Dell XPS,Electronics,75252.1
+83,Bluetooth Headphones,Clothing,48824.72
+84,Coffee Maker,Clothing,50565.12
+85,Adidas Hoodie,Beauty,30659.16
+86,Coffee Maker,Clothing,57746.9
+87,Wooden Dining Table,Home,616.33
+88,Office Chair,Home,35819.63
+89,Nike Running Shoes,Clothing,2979.36
+90,LED TV 42 inch,Beauty,44534.69
+91,Air Conditioner,Beauty,25747.87
+92,Coffee Maker,Electronics,46897.15
+93,Wooden Dining Table,Home,34647.93
+94,Air Conditioner,Home,60304.2
+95,Gaming Mouse,Beauty,9639.8
+96,Adidas Hoodie,Home,35223.48
+97,Smart Watch,Clothing,4809.72
+98,Coffee Maker,Clothing,10813.13
+99,Refrigerator,Electronics,78291.02
+100,Samsung Galaxy S23,Clothing,752.09

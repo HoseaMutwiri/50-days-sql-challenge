@@ -45,7 +45,10 @@ engine = create_engine(config.connection_url())
 
 # define raw datasets location path
 
-folder_path = Path(r"datasets\raw_datasets")
+#folder_path = Path(r"datasets\raw_datasets") # dataset path for day 1-40
+
+
+folder_path = Path(r"datasets\day_41_project_datasets") # datasets path
 
 # load all csv file in raw_dataset dir to the postgresql database using a for loop
 
@@ -63,7 +66,7 @@ for file in folder_path.glob("*.csv"):
                   con = engine,
                   index=False,
                   if_exists="replace",
-                  schema="challenge_50")
+                  schema="challenge_50_project")
         print(f"{file.name} loaded")
     except Exception as error:
         print(f"failed to load {file.name} : {error}")

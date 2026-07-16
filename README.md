@@ -2612,3 +2612,58 @@ ON e.emp_id = t.emp_id;
 DROP TABLE temporary_salary_table;
 ```
 ---
+
+## Day 41: SQL Project
+
+### **Task 1:** Create all tables based on the given ER Diagram
+
+![ER Diagram](datasets/results_images/day_41_project_er.PNG)
+
+### **Task 2:** Load dataset into postgresql tables
+
+```python
+
+folder_path = Path(r"datasets\day_41_project_datasets") # datasets path
+
+# load all csv file in raw_dataset dir to the postgresql database using a for loop
+
+
+for file in folder_path.glob("*.csv"):
+    try:
+        if file.stat().st_size == 0:
+            print (f"skiped {file.name} it is empty")
+            continue
+        file_name = file.stem.lower()
+
+        df = pd.read_csv(file)
+
+        df.to_sql(name = file_name,
+                  con = engine,
+                  index=False,
+                  if_exists="replace",
+                  schema="challenge_50_project")
+        print(f"{file.name} loaded")
+    except Exception as error:
+        print(f"failed to load {file.name} : {error}")
+print("Import process completed")
+
+```
+
+### **Task 3:** Validate the data Load
+
+```sql
+-- validate data load
+
+SELECT
+    (SELECT COUNT(*) FROM challenge_50_project.customers) AS number_of_customers,
+    (SELECT COUNT(*) FROM challenge_50_project.orders) AS number_of_orders,
+    (SELECT COUNT(*) FROM challenge_50_project.order_details) AS number_of_order_details,
+    (SELECT COUNT(*) FROM challenge_50_project.products) AS number_of_products,
+    (SELECT COUNT(*) FROM challenge_50_project.payments) AS number_of_payments
+
+```
+
+![Table records count](datasets/results_images/day_41_project_datasets_record_count.PNG)
+
+---
+
