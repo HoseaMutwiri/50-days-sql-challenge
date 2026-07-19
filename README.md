@@ -16,9 +16,9 @@
 | :--- | :--- | :--- | :--- | :--- |
 | [Day 1: Project Setup](#day-1-project-setup) | [Day 11: Relational Integrations and Grouped Metric Aggregations](#day-11-relational-integrations-and-grouped-metric-aggregations) | [Day 21: Fetching Top-N Records](#day-21-fetching-top-n-records) | [Day 31: Advanced SQL Queries & CTEs](#day-31-advanced-sql-queries--ctes) | [Day 41: SQL Project](#day-41-sql-project) |
 | [Day 2: Data Audit](#day-2-data-audit-messiness-detection) | [Day 12: Intersection Sets and Left Outer Extensions](#day-12-intersection-sets-and-left-outer-extensions) | [Day 22: Common Table Expressions and Windowed Averages](#day-22-common-table-expressions-and-windowed-averages) | [Day 32: Database Views part 1](#day-32-database-views-part-1) | [Day 42: Data Cleaning](#day-42-data-cleaning) |
-| [Day 3: Missing Values](#day-3-data-cleaning-handling-missing-values) | [Day 13: subqueries and aggregate functions](#day-13-subqueries-and-aggregate-functions) | [Day 23: Historical Trends and Previous-Value Comparisons](#day-23-historical-trends-and-previous-value-comparisons) | [Day 32: Database Views part 2](#day-32-database-views-part-2) | [Day 43](#day-43) |
-| [Day 4: Inconsistent Text](#day-4-data-cleaning-handling-inconsistent-text) | [Day 14: Nested Query Expressions](#day-14-nested-query-expressions) | [Day 24: Sequential Trends and Next-Value Comparisons](#day-24-sequential-trends-and-next-value-comparisons) | [Day 34: SQL Database Optimization(INDEX)](#day-34-sql-database-optimizationindex) | [Day 44](#day-44) |
-| [Day 5: Invalid Values](#day-5-data-cleaning-handling-invalid-values) | [Day 15: semi-joins and anti-joins](#day-15-semi-joins-and-anti-joins) | [Day 25: Window Aggregates and Cumulative Analytics](#day-25-window-aggregates-and-cumulative-analytics) | [Day 35: Database Query Optimization Part 2](#day-35-database-query-optimization-part-2) | [Day 45](#day-45) |
+| [Day 3: Missing Values](#day-3-data-cleaning-handling-missing-values) | [Day 13: subqueries and aggregate functions](#day-13-subqueries-and-aggregate-functions) | [Day 23: Historical Trends and Previous-Value Comparisons](#day-23-historical-trends-and-previous-value-comparisons) | [Day 32: Database Views part 2](#day-32-database-views-part-2) | [Day 43: Data Types & Constraints](#day-43-data-types--constraints) |
+| [Day 4: Inconsistent Text](#day-4-data-cleaning-handling-inconsistent-text) | [Day 14: Nested Query Expressions](#day-14-nested-query-expressions) | [Day 24: Sequential Trends and Next-Value Comparisons](#day-24-sequential-trends-and-next-value-comparisons) | [Day 34: SQL Database Optimization(INDEX)](#day-34-sql-database-optimizationindex) | [Day 44: Basic Analysis](#day-44-basic-analysis) |
+| [Day 5: Invalid Values](#day-5-data-cleaning-handling-invalid-values) | [Day 15: semi-joins and anti-joins](#day-15-semi-joins-and-anti-joins) | [Day 25: Window Aggregates and Cumulative Analytics](#day-25-window-aggregates-and-cumulative-analytics) | [Day 35: Database Query Optimization Part 2](#day-35-database-query-optimization-part-2) | [Day 45: Customer Analysis](#day-45-customer-analysis) |
 | [Day 6: Outlier Detection](#day-6-data-cleaning-outlier-detection--handling) | [Day 16: Multi-Table Aggregations](#day-16-multi-table-aggregations) | [Day 26: Window Ranking Functions](#day-26-window-ranking-functions) | [Day 36: Stored procedures part 1](#day-36-stored-procedures-part-1) | [Day 46](#day-46) |
 | [Day 7: Date Formatting](#day-7-data-cleaning) | [Day 17: Filtering Aggregated Result Sets](#day-17-filtering-aggregated-result-sets) | [Day 27: Conditional Query Logic](#day-27-conditional-query-logic) | [Day 37: Stored procedures part 2](#day-37-stored-procedures-part-2) | [Day 47](#day-47) |
 | [Day 8: Datatypes & Spaces](#day-8-data-cleaning) | [Day 18: Multi-Table Joins and Key Matching](#day-18-multi-table-joins-and-key-matching) | [Day 28: Advanced Analytics](#day-28-advanced-analytics)| [Day 38: Triggers Before Update and After Insert](#day-38-triggers-before-update-and-after-insert) | [Day 48](#day-48) |
@@ -2673,5 +2673,50 @@ SELECT
 - Create duplicate tables for cleaning process
 - Remove leading and trailing spaces using `TRIM()`
 - Standardize text using `INITCAP()`
+- Replace NULL values with default values
+- Checked duplicate records using `ctid`
+
+### [SOLUTIONS](src/day_42.sql)
+
+---
 
 
+## Day 43: Data Types & Constraints
+
+- Standardize and format date columns
+- Fix incorrect data types across all cleaned tables
+- ALTER columns using appropriate data types (INT, VARCHAR, NUMERIC, DATE)
+- Add Primary Key constraints to tables
+- Add Foreign Key constraints to maintain relationships between tables
+
+### [SOLUTIONS](src/day_43.sql)
+
+---
+
+
+## Day 44: Basic Analysis
+
+1. Find total number of customers
+2. Find total number of orders
+3. Calculate total revenue from payments
+4. Calculate average order value
+5. Find total products sold
+6. Calculate orders per customer using GROUP BY
+
+### [SOLUTIONS](src/day_44.sql)
+---
+
+## Day 45: Customer Analysis
+
+1. Find top customers by number of orders
+2. Find top customers by generated revenue
+3. Find customers with no orders
+4. Analyze new customer signup trend month-wise
+5. Find repeat customers with multiple orders
+6. Calculate customer lifetime value
+7. Calculate average spend per customer
+8. Find total customers per city
+
+
+### [SOLUTIONS](src/day_45.sql)
+---
