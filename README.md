@@ -2748,7 +2748,7 @@ SELECT
 
 ### [SOLUTIONS](src/day_47.sql)
 
-
+---
 
 ## Day 48: Revenue Analysis
 
@@ -2761,3 +2761,5 @@ SELECT
 7. Find days generating highest revenue.
 
 ### [SOLUTIONS](src/day_48.sql)
+
+---
